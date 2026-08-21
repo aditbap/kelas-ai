@@ -1,0 +1,331 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  Employee
+  CompanyAdmin
+  Instructor
+  SuperAdmin
+}
+
+enum TenantStatus {
+  Active
+  Suspended
+}
+
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  logoUrl   String?
+  status    TenantStatus @default(Active)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users                       User[]
+  cohorts                     Cohort[]
+  subscriptions               Subscription[]
+  payments                    Payment[]
+  instructorTenantAssignments InstructorTenantAssignment[]
+  resourceItems               ResourceItem[]
+}
+
+model User {
+  id           String   @id @default(uuid())
+  tenantId     String?  
+  name         String
+  email        String   @unique
+  emailVerified Boolean @default(false)
+  image         String?
+  passwordHash String?
+  role         Role
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  sessions      Session[]
+  accounts      Account[]
+
+  tenant                Tenant?                      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  cohortMemberships     CohortMember[]
+  submissions           Submission[]
+  progressRecords       ProgressRecord[]
+  instructorAssignments InstructorTenantAssignment[]
+  createdModules        Module[]
+  gradedSubmissions     Grade[]
+  cohortsInstructed     Cohort[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(uuid())
+  accountId             String
+  providerId            String
+  issuer                String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id @default(uuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@map("verification")
+}
+
+model InstructorTenantAssignment {
+  id           String @id @default(uuid())
+  instructorId String
+  tenantId     String
+
+  tenant     Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  instructor User   @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+
+  @@unique([instructorId, tenantId])
+}
+
+model Cohort {
+  id           String   @id @default(uuid())
+  tenantId     String
+  name         String
+  onsiteDate   DateTime
+  instructorId String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tenant       Tenant                    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  instructor   User                      @relation(fields: [instructorId], references: [id], onDelete: Restrict)
+  members      CohortMember[]
+  publications ModuleCohortPublication[]
+}
+
+model CohortMember {
+  id        String @id @default(uuid())
+  cohortId  String
+  userId    String
+  createdAt DateTime @default(now())
+
+  cohort Cohort @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([cohortId, userId])
+}
+
+model Module {
+  id                    String   @id @default(uuid())
+  title                 String
+  description           String?
+  createdByInstructorId String
+  isGlobalTemplate      Boolean  @default(false)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  createdBy    User                      @relation(fields: [createdByInstructorId], references: [id], onDelete: Restrict)
+  lessons      Lesson[]
+  assignments  Assignment[]
+  publications ModuleCohortPublication[]
+  progressRecords ProgressRecord[]
+}
+
+model ModuleCohortPublication {
+  id        String   @id @default(uuid())
+  moduleId  String
+  cohortId  String
+  createdAt DateTime @default(now())
+
+  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  cohort Cohort @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+
+  @@unique([moduleId, cohortId])
+}
+
+enum ContentType {
+  Text
+  Video
+  File
+}
+
+model Lesson {
+  id          String      @id @default(uuid())
+  moduleId    String
+  title       String
+  contentType ContentType
+  content     String?     // Text content or URL
+  order       Int
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+}
+
+enum SubmissionType {
+  File
+  Text
+  Link
+}
+
+model Assignment {
+  id             String         @id @default(uuid())
+  moduleId       String
+  instructions   String
+  submissionType SubmissionType
+  dueDate        DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  module      Module       @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  submissions Submission[]
+}
+
+enum SubmissionStatus {
+  Pending
+  Graded
+}
+
+model Submission {
+  id           String           @id @default(uuid())
+  assignmentId String
+  userId       String
+  content      String?          // File URL or Text or Link
+  status       SubmissionStatus @default(Pending)
+  submittedAt  DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  grade      Grade?
+}
+
+model Grade {
+  id                   String   @id @default(uuid())
+  submissionId         String   @unique
+  gradedByInstructorId String
+  score                Int?     // Optional numeric score
+  passFail             Boolean? // Optional pass/fail
+  feedbackText         String?
+  gradedAt             DateTime @default(now())
+
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  gradedBy   User       @relation(fields: [gradedByInstructorId], references: [id], onDelete: Restrict)
+}
+
+enum AssignmentStatus {
+  NotStarted
+  Pending
+  Graded
+}
+
+model ProgressRecord {
+  id                    String           @id @default(uuid())
+  userId                String
+  moduleId              String
+  lessonsCompletedCount Int              @default(0)
+  assignmentStatus      AssignmentStatus @default(NotStarted)
+  lastActivityAt        DateTime         @default(now())
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, moduleId])
+}
+
+enum ResourceType {
+  Tip
+  Template
+  Guide
+}
+
+model ResourceItem {
+  id        String       @id @default(uuid())
+  type      ResourceType
+  title     String
+  content   String
+  tags      String[]
+  isGlobal  Boolean      @default(false)
+  tenantId  String?      // Nullable if global
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
+
+enum SubscriptionStatus {
+  Active
+  PastDue
+  Canceled
+  Incomplete
+}
+
+model Subscription {
+  id                   String             @id @default(uuid())
+  tenantId             String
+  stripeSubscriptionId String?            @unique
+  tier                 String
+  seatLimit            Int
+  seatsUsed            Int                @default(0)
+  status               SubscriptionStatus @default(Active)
+  renewalDate          DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  payments Payment[]
+}
+
+enum PaymentStatus {
+  Paid
+  Open
+  Void
+  Uncollectible
+}
+
+model Payment {
+  id              String        @id @default(uuid())
+  tenantId        String
+  subscriptionId  String?
+  amount          Int           // In cents
+  status          PaymentStatus @default(Paid)
+  stripeInvoiceId String?       @unique
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+}
