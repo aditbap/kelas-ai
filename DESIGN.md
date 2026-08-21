@@ -1,9 +1,7 @@
 # DESIGN.md — Corporate AI Training Platform
 
 **Companion to:** [`PRD.md`](./PRD.md) and [`BUILD_PLAN.md`](./BUILD_PLAN.md)
-**Reference:** Visual direction adapted from [ruangguru.com/rea](https://www.ruangguru.com/rea) (clean, professional, tech-forward B2B/edtech style).
-
-This is the design system to follow when building any UI for this project (marketing site and platform dashboards). No UI has been built yet — treat this as the starting spec, and update it once real screens exist.
+**Status:** Derived from the shipped implementation (marketing site + all four dashboard shells). Update this file again whenever a new UI pattern ships that isn't captured here yet.
 
 ---
 
@@ -11,64 +9,80 @@ This is the design system to follow when building any UI for this project (marke
 
 - **Trustworthy, not flashy.** Buyers are HR/L&D decision-makers evaluating a B2B tool — clean and credible beats loud and trendy.
 - **Clarity over decoration.** Content (curriculum, progress, pricing) should be scannable at a glance.
-- **Consistent across both sides of the product** — the public marketing site and the authenticated learning platform should feel like the same product, not two different apps.
+- **One system, two surfaces.** The public marketing site and the authenticated platform share the same tokens/components but use different layouts: marketing is a vertical section flow, the platform is a sidebar + content shell.
 
 ---
 
-## 2. Color Palette
+## 2. Foundation: shadcn tokens ([`src/app/globals.css`](src/app/globals.css))
 
-| Token | Value | Usage |
-|---|---|---|
-| `--color-bg` | `#FFFFFF` | Page background |
-| `--color-bg-muted` | `#F7F8FA` | Section alternation, cards |
-| `--color-primary` | `#2563EB` | CTAs, links, active states |
-| `--color-primary-hover` | `#1D4ED8` | Hover/pressed state |
-| `--color-text` | `#0F172A` | Headlines, body text |
-| `--color-text-muted` | `#64748B` | Secondary text, captions |
-| `--color-border` | `#E2E8F0` | Dividers, card borders |
-| `--color-success` | `#16A34A` | Progress, completion states |
-| `--color-warning` | `#D97706` | Alerts, discount badges |
-| `--color-danger` | `#DC2626` | Errors, destructive actions |
+Colors are defined as CSS variables (oklch) and consumed via Tailwind utility classes (`bg-primary`, `text-muted-foreground`, `border-border`, etc.) — never hardcode hex values in components.
 
-Keep accent color usage to CTAs, links, and active/selected states — everything else stays neutral (white/gray/dark text).
+| Token                            | Light value                                | Usage                                                                |
+| -------------------------------- | ------------------------------------------ | -------------------------------------------------------------------- |
+| `--background` / `--foreground`  | white / near-black                         | Page background & default text                                       |
+| `--primary`                      | `oklch(0.546 0.245 262.881)` (≈ `#2563EB`) | CTAs, links, active states, positive badges                          |
+| `--primary-foreground`           | near-white                                 | Text on primary-colored surfaces                                     |
+| `--muted` / `--muted-foreground` | light gray / mid gray                      | Secondary backgrounds, secondary text                                |
+| `--border`                       | light gray                                 | Card borders, dividers, table rules                                  |
+| `--destructive`                  | red                                        | Errors, "at risk" states                                             |
+| `--radius`                       | `0.625rem`                                 | Base radius; `rounded-lg`/`rounded-xl`/`rounded-full` derive from it |
 
-## 3. Typography
+Dark mode variables exist in `globals.css` but are unstyled beyond the shadcn defaults — not a deliberate part of this product's design yet.
 
-- **Font:** Inter (or system sans-serif fallback: `-apple-system, Segoe UI, sans-serif`).
-- **Scale:**
-  - H1 (hero): 40–48px, bold, tight line-height
-  - H2 (section): 28–32px, bold
-  - H3 (card/subsection): 18–20px, semibold
-  - Body: 16px, regular, 1.5 line-height
-  - Caption/meta: 13–14px, regular, `--color-text-muted`
-- Pricing and key numbers get extra weight (bold/semibold) and slightly larger size to stand out, per the reference site's pricing-card treatment.
+**Font:** Geist Sans (`--font-geist-sans`, applied via `font-sans`), Geist Mono for code/monospace contexts.
+
+---
+
+## 3. Typography scale (as used)
+
+| Role                   | Classes                                                                     |
+| ---------------------- | --------------------------------------------------------------------------- |
+| Marketing H1           | `text-4xl sm:text-5xl font-bold tracking-tight`                             |
+| Marketing H2 (section) | `text-2xl sm:text-3xl font-bold tracking-tight`                             |
+| Dashboard page title   | `text-2xl font-semibold tracking-tight`                                     |
+| Card/subsection title  | `text-lg font-semibold` or `text-base font-semibold`                        |
+| Body                   | `text-sm` (dashboards) / `text-lg text-muted-foreground` (marketing intros) |
+| Meta/caption           | `text-xs text-muted-foreground`                                             |
+
+---
 
 ## 4. Layout
 
-- Single-column, vertical section flow for marketing pages (hero → value prop → programs/pricing → testimonials → CTA).
-- Sticky top navigation bar for the marketing site.
-- Max content width: `1200px`, centered, with `24px` horizontal padding on mobile.
-- Section vertical spacing: `80–120px` desktop, `48–64px` mobile.
-- Dashboards (authenticated app) use a left sidebar + content area layout, not the marketing site's vertical flow.
+**Marketing site** ([`src/app/(marketing)/`](<src/app/(marketing)/>)):
 
-## 5. Components
+- Shared shell: sticky `MarketingNav` (h-16, blurred background) + page content + `MarketingFooter` — see [`marketing-nav.tsx`](src/components/marketing-nav.tsx) / [`marketing-footer.tsx`](src/components/marketing-footer.tsx).
+- Container: `mx-auto max-w-6xl px-6` (narrower `max-w-3xl`/`max-w-2xl` for text-heavy centered sections like FAQ or a single hero).
+- Vertical section flow, sections separated by `border-t border-border`, alternating `bg-muted/40` backgrounds.
+- Section padding: `py-20`–`py-24`.
 
-- **Buttons:** solid `--color-primary` for primary CTA, outline/ghost for secondary. Rounded corners (`8px`). Clear hover state.
-- **Cards:** white background, `1px solid --color-border`, `12px` radius, subtle shadow on hover for clickable cards. Used for pricing tiers, program cards, resource items.
-- **Pricing cards:** highlight the recommended tier, show discount/seat-band badges using `--color-warning`.
-- **Badges:** small pill shape, used for status (invite pending, completed, in progress) and discount labels.
-- **Testimonial/logo carousel:** used for social proof (client logos, alumni/employee quotes) on the marketing site.
-- **Progress indicators:** for employee dashboards — simple bar or ring, `--color-success` when complete.
-- **Forms:** labeled inputs, `--color-border` default, `--color-primary` on focus, inline validation in `--color-danger`.
+**Authenticated platform** ([`src/components/app-shell.tsx`](src/components/app-shell.tsx)):
+
+- Left sidebar (`md:w-64`, `bg-sidebar`) with role label, nav links, user info, sign-out — collapses to a horizontal scroll bar on mobile.
+- Main content: `flex-1 p-6 md:p-10`, typically wrapped in a `max-w-4xl` or `max-w-5xl` column.
+- Nav items not yet built are shown but disabled with a "Soon" pill, rather than hidden — see `NavItem.enabled` in `app-shell.tsx`.
+
+---
+
+## 5. Components (implemented patterns)
+
+- **Button** ([`src/components/ui/button.tsx`](src/components/ui/button.tsx)): variants `default | outline | secondary | ghost | destructive | link`, sizes `xs–lg` + icon sizes. Polymorphic via Base UI's `render` prop (e.g. `<Button render={<Link href="/pricing">…} />` for a link styled as a button).
+- **Card-like container:** `rounded-xl border border-border bg-background p-6` for content cards (pricing, benefits, programs); `rounded-lg border border-border p-4`/`p-5` for tighter dashboard panels and forms.
+- **Status/badge pill:** `rounded-full px-2 py-0.5 text-xs font-medium` — `bg-primary/10 text-primary` for positive/active, `bg-destructive/10 text-destructive` for at-risk/error, `border border-border text-muted-foreground` for neutral (e.g. "Invited").
+- **Data table:** `w-full text-sm`, header row `border-b border-border bg-muted/40 text-muted-foreground`, body rows `border-b border-border last:border-0`, cells `px-4 py-2` — used identically across the roster, team-progress, and tenant-list tables.
+- **List panel:** `divide-y divide-border rounded-lg border border-border` wrapping `px-4 py-3` items — used for grading queues and assigned-module lists.
+- **Forms:** shadcn `Label` + `Input`, fields spaced `space-y-1.5` within a field and `space-y-3`/`space-y-4` between fields; inline error in `text-destructive`, success/confirmation in `text-primary`, both `text-xs`/`text-sm`.
+
+---
 
 ## 6. Tone & Copy
 
 - Direct, benefit-led headlines (e.g., "Turn AI from a buzzword into a daily productivity tool for your employees").
-- Use concrete numbers/stats for credibility (seats, completion rates, companies onboarded) once real data exists — do not fabricate stats.
-- Keep authenticated-app copy plain and task-focused (no marketing language inside dashboards).
+- Marketing copy never fabricates stats or testimonials before they're real — the Testimonials page says so explicitly rather than inventing quotes.
+- Authenticated-app copy is plain and task-focused (no marketing language inside dashboards).
 
 ---
 
-## 7. Status
+## 7. Known gaps
 
-This document is a **pre-build spec**, not derived from a shipped UI yet. Once Phase 3 (Marketing Site) and Phase 2 (dashboard shells) in `BUILD_PLAN.md` produce real screens, regenerate/update this file from the actual implementation so it reflects what's shipped, not just intent.
+- No dark mode styling beyond shadcn's defaults — full dark theme is unstyled.
+- No dedicated empty/loading/error states beyond simple inline text (e.g. "No employees yet…") — revisit once real usage surfaces a need for richer states.

@@ -6,9 +6,9 @@ import { requireRole } from '@/lib/session';
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard', href: '/instructor' },
-  { label: 'Content Library', enabled: false },
-  { label: 'Grading Queue', enabled: false },
-  { label: 'Resource Library', enabled: false },
+  { label: 'Content Library', href: '/instructor/modules' },
+  { label: 'Grading Queue', href: '/instructor/grading' },
+  { label: 'Resource Library', href: '/instructor/resources' },
   { label: 'Tenant Analytics', enabled: false },
 ];
 

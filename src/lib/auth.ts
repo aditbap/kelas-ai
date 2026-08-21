@@ -4,6 +4,7 @@ import { nextCookies } from 'better-auth/next-js';
 
 import { Role } from '@/generated/prisma/client/enums';
 import { prisma } from '@/lib/db';
+import { sendEmail } from '@/lib/email';
 
 /**
  * Accounts on this platform are never publicly self-registered — every User is
@@ -20,10 +21,11 @@ export const auth = betterAuth({
     enabled: true,
     disableSignUp: true,
     sendResetPassword: async ({ user, url }) => {
-      // TODO(Phase 4/5): replace with a real transactional email (Resend) once
-      // the checkout/invite flows exist. Logging keeps the invite/reset flow
-      // testable end-to-end in the meantime.
-      console.log(`[auth] Set-password link for ${user.email}: ${url}`);
+      await sendEmail({
+        to: user.email,
+        subject: 'Set your Kelas AI password',
+        html: `<p>Click the link below to set your password and access your workspace.</p><p><a href="${url}">${url}</a></p>`,
+      });
     },
   },
   user: {

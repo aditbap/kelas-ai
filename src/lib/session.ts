@@ -56,5 +56,10 @@ export async function requireRole(allowed: Role | Role[]): Promise<AppSession> {
   const roles = Array.isArray(allowed) ? allowed : [allowed];
   if (!roles.includes(session.role)) redirect(roleHome(session.role));
 
+  if (session.tenantId) {
+    const tenant = await prisma.tenant.findUnique({ where: { id: session.tenantId } });
+    if (tenant?.status === 'Suspended') redirect('/login?suspended=1');
+  }
+
   return session;
 }

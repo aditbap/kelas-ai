@@ -14,6 +14,7 @@ export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get('next');
+  const suspended = searchParams.get('suspended') === '1';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -43,6 +44,12 @@ export function LoginForm() {
       <p className="mt-1 text-sm text-muted-foreground">
         Use the email and password from your workspace invite.
       </p>
+
+      {suspended ? (
+        <p className="mt-4 rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+          Your workspace has been suspended. Contact your account admin for help.
+        </p>
+      ) : null}
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
         <div className="space-y-1.5">

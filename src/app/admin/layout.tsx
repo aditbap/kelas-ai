@@ -6,7 +6,8 @@ import { requireRole } from '@/lib/session';
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard', href: '/admin' },
-  { label: 'Team Roster', enabled: false },
+  { label: 'Team Roster', href: '/admin/roster' },
+  { label: 'Cohorts', href: '/admin/cohorts' },
   { label: 'Team Progress', enabled: false },
   { label: 'Billing', enabled: false },
 ];

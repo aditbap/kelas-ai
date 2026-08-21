@@ -6,11 +6,11 @@ import { requireRole } from '@/lib/session';
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard', href: '/employee' },
-  { label: 'Learning Modules', enabled: false },
-  { label: 'Assignments', enabled: false },
-  { label: 'My Progress', enabled: false },
-  { label: 'AI Resource Library', enabled: false },
-  { label: 'My Cohort', enabled: false },
+  { label: 'Learning Modules', href: '/employee/modules' },
+  { label: 'Assignments', href: '/employee/assignments' },
+  { label: 'My Progress', href: '/employee/progress' },
+  { label: 'AI Resource Library', href: '/employee/resources' },
+  { label: 'My Cohort', href: '/employee/cohort' },
 ];
 
 export default async function EmployeeLayout({ children }: { children: ReactNode }) {
