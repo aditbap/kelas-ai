@@ -1,12 +1,16 @@
+import { Parisienne } from 'next/font/google';
 import { redirect } from 'next/navigation';
 
 import { Role } from '@/generated/prisma/client/enums';
 import { prisma } from '@/lib/db';
 import { getTranslations } from '@/lib/i18n/get-locale';
+import { hasFailedGradeInModule } from '@/lib/module-completion';
 import { requireRole } from '@/lib/session';
 
 import { loadModulePlayerData } from '../data';
 import { PrintButton } from './print-button';
+
+const nameFont = Parisienne({ weight: '400', subsets: ['latin'] });
 
 export default async function ModuleCertificatePage({
   params,
@@ -19,7 +23,11 @@ export default async function ModuleCertificatePage({
   const s = t.student.progress;
 
   const result = await loadModulePlayerData(id);
-  if (result.status !== 'ok' || result.data.overallPercent < 100) {
+  if (
+    result.status !== 'ok' ||
+    result.data.overallPercent < 100 ||
+    (await hasFailedGradeInModule(session.userId, id))
+  ) {
     redirect('/student/progress');
   }
 
@@ -51,12 +59,13 @@ export default async function ModuleCertificatePage({
           printColorAdjust: 'exact',
         }}
       >
-        <p className="absolute top-[46%] w-full text-tagline font-semibold text-[#1a1a1a]">
+        <p className={`absolute top-[46%] w-full text-4xl text-[#1a1a1a] ${nameFont.className}`}>
           {session.name}
         </p>
         <p className="absolute top-[57%] w-full text-fine text-[#555]">
-          {mod.title} &middot; {completedAt}
+          for successfully completing the {mod.title}
         </p>
+        <p className="absolute top-[63%] w-full text-fine text-[#555]">{completedAt}</p>
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Role } from '@/generated/prisma/client/enums';
 import { prisma } from '@/lib/db';
 import { getTranslations } from '@/lib/i18n/get-locale';
-import { getModuleCompletionPercent } from '@/lib/module-completion';
+import { getModuleCompletionPercent, hasFailedGradeInModule } from '@/lib/module-completion';
 import { requireRole } from '@/lib/session';
 import { cn } from '@/lib/utils';
 
@@ -38,6 +38,7 @@ export default async function ProgressPage() {
     modules.map(async (module) => ({
       module,
       percent: await getModuleCompletionPercent(session.userId, module.id),
+      failed: await hasFailedGradeInModule(session.userId, module.id),
     })),
   );
 
@@ -55,8 +56,8 @@ export default async function ProgressPage() {
         </div>
       ) : (
         <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {modulesWithPercent.map(({ module, percent }) => {
-            const earned = percent === 100;
+          {modulesWithPercent.map(({ module, percent, failed }) => {
+            const earned = percent === 100 && !failed;
 
             return (
               <div
