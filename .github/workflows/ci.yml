@@ -22,7 +22,11 @@ jobs:
         run: npx prisma generate
       - name: Run Linter
         run: npm run lint
+      - name: Generate Next.js Route Types
+        run: npx next typegen
       - name: Type Check
         run: npx tsc --noEmit
+      - name: Unit Tests
+        run: npm test
       - name: Build
         run: npm run build

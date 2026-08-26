@@ -7,14 +7,16 @@ import { useState, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Role } from '@/generated/prisma/client/enums';
 import { authClient } from '@/lib/auth-client';
+import { useLocale } from '@/lib/i18n/locale-context';
 import { roleHome } from '@/lib/roles';
 
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get('next');
-  const suspended = searchParams.get('suspended') === '1';
+  const { t } = useLocale();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,31 +31,23 @@ export function LoginForm() {
       const { data, error: signInError } = await authClient.signIn.email({ email, password });
 
       if (signInError || !data) {
-        setError(signInError?.message ?? 'Something went wrong. Please try again.');
+        setError(signInError?.message ?? t.auth.genericError);
         return;
       }
 
-      router.push(next ?? roleHome(data.user.role));
+      router.push(next ?? roleHome(data.user.role ?? Role.Student));
       router.refresh();
     });
   }
 
   return (
     <div>
-      <h1 className="text-lg font-semibold tracking-tight">Sign in</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Use the email and password from your workspace invite.
-      </p>
-
-      {suspended ? (
-        <p className="mt-4 rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-          Your workspace has been suspended. Contact your account admin for help.
-        </p>
-      ) : null}
+      <h1 className="text-tagline">{t.auth.login.title}</h1>
+      <p className="mt-1 text-caption text-ink-muted">{t.auth.login.subtitle}</p>
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
         <div className="space-y-1.5">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t.auth.login.email}</Label>
           <Input
             id="email"
             name="email"
@@ -67,12 +61,9 @@ export function LoginForm() {
 
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <Label htmlFor="password">Password</Label>
-            <Link
-              href="/forgot-password"
-              className="text-xs text-muted-foreground hover:text-foreground"
-            >
-              Forgot password?
+            <Label htmlFor="password">{t.auth.login.password}</Label>
+            <Link href="/forgot-password" className="text-fine text-ink-muted hover:text-ink">
+              {t.auth.login.forgotPassword}
             </Link>
           </div>
           <Input
@@ -87,15 +78,22 @@ export function LoginForm() {
         </div>
 
         {error ? (
-          <p role="alert" className="text-sm text-destructive">
+          <p role="alert" className="text-caption text-destructive">
             {error}
           </p>
         ) : null}
 
         <Button type="submit" className="w-full justify-center" disabled={isPending}>
-          {isPending ? 'Signing in…' : 'Sign in'}
+          {isPending ? t.auth.login.submitPending : t.auth.login.submit}
         </Button>
       </form>
+
+      <p className="mt-6 text-center text-caption text-ink-muted">
+        {t.auth.login.noAccount}{' '}
+        <Link href="/signup" className="font-medium text-ink hover:underline">
+          {t.auth.login.createAccount}
+        </Link>
+      </p>
     </div>
   );
 }

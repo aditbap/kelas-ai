@@ -1,12 +1,12 @@
 import { getSessionCookie } from 'better-auth/cookies';
 import { NextRequest, NextResponse } from 'next/server';
 
-const PROTECTED_PREFIXES = ['/employee', '/admin', '/instructor', '/super-admin'];
+const PROTECTED_PREFIXES = ['/student', '/editor'];
 
 /**
  * Coarse gate: is there a session cookie at all? This does not verify the
  * session against the database (that would mean a DB round-trip on every
- * request/asset) — it only keeps signed-out visitors from ever reaching a
+ * request/asset) - it only keeps signed-out visitors from ever reaching a
  * protected route. The specific role each dashboard requires is enforced in
  * that dashboard's own layout via `requireRole` (src/lib/session.ts), which
  * does check the database.
@@ -29,5 +29,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/employee/:path*', '/admin/:path*', '/instructor/:path*', '/super-admin/:path*'],
+  matcher: ['/student/:path*', '/editor/:path*'],
 };

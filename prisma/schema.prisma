@@ -8,57 +8,33 @@ datasource db {
 }
 
 enum Role {
-  Employee
-  CompanyAdmin
-  Instructor
-  SuperAdmin
-}
-
-enum TenantStatus {
-  Active
-  Suspended
-}
-
-model Tenant {
-  id        String   @id @default(uuid())
-  name      String
-  logoUrl   String?
-  status    TenantStatus @default(Active)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  users                       User[]
-  cohorts                     Cohort[]
-  subscriptions               Subscription[]
-  payments                    Payment[]
-  instructorTenantAssignments InstructorTenantAssignment[]
-  resourceItems               ResourceItem[]
+  Student
+  Editor
 }
 
 model User {
-  id           String   @id @default(uuid())
-  tenantId     String?  
-  name         String
-  email        String   @unique
-  emailVerified Boolean @default(false)
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
   image         String?
-  passwordHash String?
-  role         Role
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  passwordHash  String?
+  role          Role
+  lastNudgedAt  DateTime? // Phase 12 habit-loop: last post-training nudge email sent, to cap cadence
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  sessions      Session[]
-  accounts      Account[]
+  sessions Session[]
+  accounts Account[]
 
-  tenant                Tenant?                      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  cohortMemberships     CohortMember[]
-  submissions           Submission[]
-  progressRecords       ProgressRecord[]
-  instructorAssignments InstructorTenantAssignment[]
-  createdModules        Module[]
-  gradedSubmissions     Grade[]
-  cohortsInstructed     Cohort[]
-  auditLogs             AuditLog[]
+  cohortMemberships CohortMember[]
+  submissions       Submission[]
+  sessionProgress   SessionProgress[]
+  createdModules    Module[]
+  gradedSubmissions Grade[]
+  cohortsCreated    Cohort[]
+  auditLogs         AuditLog[]
+  payments          Payment[]
 
   @@map("user")
 }
@@ -109,34 +85,24 @@ model Verification {
   @@map("verification")
 }
 
-model InstructorTenantAssignment {
-  id           String @id @default(uuid())
-  instructorId String
-  tenantId     String
-
-  tenant     Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  instructor User   @relation(fields: [instructorId], references: [id], onDelete: Cascade)
-
-  @@unique([instructorId, tenantId])
-}
-
+/// A Cohort is purely an onsite-session/community grouping (a schedulable
+/// batch with a lead Editor and a roster) - it carries no price and gates no
+/// content. Module access is governed platform-wide by Payment (the single
+/// All-Access package), not by cohort membership.
 model Cohort {
-  id           String   @id @default(uuid())
-  tenantId     String
-  name         String
-  onsiteDate   DateTime
-  instructorId String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id         String   @id @default(uuid())
+  name       String
+  onsiteDate DateTime
+  editorId   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  tenant       Tenant                    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  instructor   User                      @relation(fields: [instructorId], references: [id], onDelete: Restrict)
-  members      CohortMember[]
-  publications ModuleCohortPublication[]
+  editor  User           @relation(fields: [editorId], references: [id], onDelete: Restrict)
+  members CohortMember[]
 }
 
 model CohortMember {
-  id        String @id @default(uuid())
+  id        String   @id @default(uuid())
   cohortId  String
   userId    String
   createdAt DateTime @default(now())
@@ -148,31 +114,46 @@ model CohortMember {
 }
 
 model Module {
-  id                    String   @id @default(uuid())
-  title                 String
-  description           String?
-  createdByInstructorId String
-  isGlobalTemplate      Boolean  @default(false)
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  id                   String   @id @default(uuid())
+  title                String
+  description          String?
+  createdByEditorId    String
+  // Nullable self-relation: a module can require another module of the same
+  // editor's to be fully completed first (e.g. Modul 2 requires Modul 1).
+  // SetNull rather than Restrict/Cascade, so deleting the prerequisite just
+  // unlocks the dependent module instead of blocking the deletion or cascading.
+  prerequisiteModuleId String?
+  // A draft module is only visible to its Editor. Publishing makes it visible
+  // platform-wide to every Student holding the single All-Access package -
+  // there is no per-cohort publication step anymore.
+  isPublished          Boolean  @default(false)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
-  createdBy    User                      @relation(fields: [createdByInstructorId], references: [id], onDelete: Restrict)
-  lessons      Lesson[]
-  assignments  Assignment[]
-  publications ModuleCohortPublication[]
-  progressRecords ProgressRecord[]
+  createdBy    User            @relation(fields: [createdByEditorId], references: [id], onDelete: Restrict)
+  prerequisite Module?         @relation("ModulePrerequisite", fields: [prerequisiteModuleId], references: [id], onDelete: SetNull)
+  unlocks      Module[]        @relation("ModulePrerequisite")
+  sessions     ModuleSession[]
 }
 
-model ModuleCohortPublication {
+/// A module is broken into ordered sessions (e.g. "Sesi 1: Fondasi Prompting").
+/// A single-session module (like Modul 1) just has one row here. Publishing,
+/// prerequisites, and cohort access all stay at the Module level; sessions are
+/// purely a content-and-progress grouping underneath it.
+model ModuleSession {
   id        String   @id @default(uuid())
   moduleId  String
-  cohortId  String
+  title     String
+  order     Int
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
-  cohort Cohort @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+  module      Module            @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  lessons     Lesson[]
+  assignments Assignment[]
+  progress    SessionProgress[]
 
-  @@unique([moduleId, cohortId])
+  @@unique([moduleId, order])
 }
 
 enum ContentType {
@@ -181,17 +162,28 @@ enum ContentType {
   File
 }
 
+/// What role a content block plays within its session, so the UI can render
+/// "Tujuan Belajar" / "Ringkasan Konsep" / "Instruksi Praktik" as distinct,
+/// labeled sections instead of an undifferentiated list.
+enum LessonKind {
+  Objectives
+  Summary
+  Practice
+  Supplementary
+}
+
 model Lesson {
   id          String      @id @default(uuid())
-  moduleId    String
+  sessionId   String
   title       String
   contentType ContentType
-  content     String?     // Text content or URL
+  kind        LessonKind  @default(Supplementary)
+  content     String? // Text content or URL
   order       Int
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
-  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  session ModuleSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 }
 
 enum SubmissionType {
@@ -201,15 +193,19 @@ enum SubmissionType {
 }
 
 model Assignment {
-  id             String         @id @default(uuid())
-  moduleId       String
-  instructions   String
-  submissionType SubmissionType
-  dueDate        DateTime?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  id                 String         @id @default(uuid())
+  sessionId          String
+  instructions       String
+  submissionType     SubmissionType
+  dueDate            DateTime?
+  // Flags a task whose output (e.g. a notification or auto-reply template) is
+  // meant to be reused as-is in a later automation module, so it can be
+  // queried and surfaced without re-deriving it from instruction text.
+  isAdvancedMaterial Boolean        @default(false)
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
 
-  module      Module       @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  session     ModuleSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   submissions Submission[]
 }
 
@@ -222,7 +218,7 @@ model Submission {
   id           String           @id @default(uuid())
   assignmentId String
   userId       String
-  content      String?          // File URL or Text or Link
+  content      String? // File URL or Text or Link
   status       SubmissionStatus @default(Pending)
   submittedAt  DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
@@ -235,16 +231,16 @@ model Submission {
 }
 
 model Grade {
-  id                   String   @id @default(uuid())
-  submissionId         String   @unique
-  gradedByInstructorId String
-  score                Int?     // Optional numeric score
-  passFail             Boolean? // Optional pass/fail
-  feedbackText         String?
-  gradedAt             DateTime @default(now())
+  id               String   @id @default(uuid())
+  submissionId     String   @unique
+  gradedByEditorId String
+  score            Int? // Optional numeric score
+  passFail         Boolean? // Optional pass/fail
+  feedbackText     String?
+  gradedAt         DateTime @default(now())
 
   submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
-  gradedBy   User       @relation(fields: [gradedByInstructorId], references: [id], onDelete: Restrict)
+  gradedBy   User       @relation(fields: [gradedByEditorId], references: [id], onDelete: Restrict)
 }
 
 enum AssignmentStatus {
@@ -253,20 +249,23 @@ enum AssignmentStatus {
   Graded
 }
 
-model ProgressRecord {
+/// Progress is tracked per session, not per module, so a student can resume
+/// from the last session they actually worked on within a multi-session
+/// module instead of the app only knowing "some lesson in this module".
+model SessionProgress {
   id                    String           @id @default(uuid())
   userId                String
-  moduleId              String
+  sessionId             String
   lessonsCompletedCount Int              @default(0)
   assignmentStatus      AssignmentStatus @default(NotStarted)
   lastActivityAt        DateTime         @default(now())
   createdAt             DateTime         @default(now())
   updatedAt             DateTime         @updatedAt
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session ModuleSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, moduleId])
+  @@unique([userId, sessionId])
 }
 
 enum ResourceType {
@@ -281,35 +280,8 @@ model ResourceItem {
   title     String
   content   String
   tags      String[]
-  isGlobal  Boolean      @default(false)
-  tenantId  String?      // Nullable if global
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
-
-  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-}
-
-enum SubscriptionStatus {
-  Active
-  PastDue
-  Canceled
-  Incomplete
-}
-
-model Subscription {
-  id                   String             @id @default(uuid())
-  tenantId             String
-  stripeSubscriptionId String?            @unique
-  tier                 String
-  seatLimit            Int
-  seatsUsed            Int                @default(0)
-  status               SubscriptionStatus @default(Active)
-  renewalDate          DateTime?
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt
-
-  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  payments Payment[]
 }
 
 enum PaymentStatus {
@@ -319,22 +291,25 @@ enum PaymentStatus {
   Uncollectible
 }
 
+/// The single All-Access package purchase: one Student ever has at most one
+/// row here (@@unique([studentId])), bought once via Xendit, and it
+/// permanently unlocks every published Module platform-wide. There is no
+/// recurring billing and no per-cohort or per-module pricing.
 model Payment {
   id              String        @id @default(uuid())
-  tenantId        String
-  subscriptionId  String?
-  amount          Int           // In cents
+  studentId       String        @unique
+  amount          Int // In the invoice's currency's base unit (e.g. Rupiah for IDR), after any promo discount
   status          PaymentStatus @default(Paid)
-  stripeInvoiceId String?       @unique
+  xenditInvoiceId String?       @unique
+  promoCode       String? // Set when a promo code (e.g. a 100%-off code) was applied at checkout
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 
-  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  subscription Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+  student User @relation(fields: [studentId], references: [id], onDelete: Cascade)
 }
 
-/// Discrete Super Admin actions with cross-tenant effect (PRD §9 auditability) —
-/// not a request log, just the actions that change or expose another tenant's state.
+/// Discrete Editor actions worth an audit trail (content authoring, grading,
+/// enrollment payments) - not a request log, just state-changing actions.
 model AuditLog {
   id         String   @id @default(uuid())
   actorId    String
@@ -343,5 +318,8 @@ model AuditLog {
   targetId   String
   createdAt  DateTime @default(now())
 
-  actor User @relation(fields: [actorId], references: [id], onDelete: Cascade)
+  // Restrict, not Cascade: deleting a user must never silently erase the audit
+  // trail they produced - that defeats the point of an audit log. A future
+  // user-deletion flow has to explicitly decide what happens to their history.
+  actor User @relation(fields: [actorId], references: [id], onDelete: Restrict)
 }

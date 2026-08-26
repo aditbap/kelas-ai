@@ -13,6 +13,8 @@ function createPrismaClient() {
   return new PrismaClient({ adapter });
 }
 
+// Force clear cache to pick up newly generated Prisma client
+delete globalForPrisma.prisma;
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
 if (process.env.NODE_ENV !== 'production') {

@@ -6,13 +6,12 @@ import { Role } from '@/generated/prisma/client/enums';
  */
 export function roleHome(role: Role): string {
   switch (role) {
-    case Role.Employee:
-      return '/employee';
-    case Role.CompanyAdmin:
-      return '/admin';
-    case Role.Instructor:
-      return '/instructor';
-    case Role.SuperAdmin:
-      return '/super-admin';
+    case Role.Student:
+      return '/student';
+    case Role.Editor:
+      return '/editor';
   }
 }
+
+/** Lowercase route segment used to key the dashboard nav. */
+export type AppRole = 'editor' | 'student';

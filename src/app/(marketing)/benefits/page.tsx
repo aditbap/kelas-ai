@@ -1,60 +1,71 @@
+import { Check } from '@phosphor-icons/react/dist/ssr';
 import type { Metadata } from 'next';
 
+import { Reveal } from '@/components/reveal';
+import { Tile } from '@/components/tile';
+import { getTranslations } from '@/lib/i18n/get-locale';
+
 export const metadata: Metadata = {
-  title: 'Benefits — Kelas AI',
+  title: 'Benefits: Kelas AI',
 };
 
-const companyBenefits = [
-  'Visibility into whether training actually changed daily behavior, not just attendance',
-  'Adoption reporting your leadership can point to as ROI',
-  'One workspace for every onsite cohort — no spreadsheets to track progress',
-  'Seats scale with your headcount, no re-negotiating a new deal each time',
-];
+function BenefitList({ items, tone }: { items: string[]; tone: 'light' | 'dark' }) {
+  return (
+    <ul className="mt-8 space-y-4">
+      {items.map((item) => (
+        <li key={item} className="flex gap-3">
+          <Check
+            size={18}
+            weight="bold"
+            className={
+              tone === 'dark' ? 'mt-1 shrink-0 text-action-on-dark' : 'mt-1 shrink-0 text-action'
+            }
+          />
+          <span
+            className={
+              tone === 'dark' ? 'text-caption text-on-dark-muted' : 'text-caption text-ink-muted'
+            }
+          >
+            {item}
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
-const employeeBenefits = [
-  'Practical AI skills you can use the same day, not abstract theory',
-  'A place to revisit training material whenever you need it',
-  'Prompting templates and guides for your actual day-to-day tasks',
-  'Feedback from a real instructor on your assignments, not just a quiz score',
-];
+export default async function BenefitsPage() {
+  const { t } = await getTranslations();
 
-export default function BenefitsPage() {
   return (
     <>
-      <section className="mx-auto max-w-3xl px-6 pt-20 pb-16 text-center">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Benefits</h1>
-        <p className="mt-6 text-lg text-muted-foreground">
-          One bundle, two audiences — here&apos;s what each side actually gets.
-        </p>
-      </section>
+      <Tile surface="canvas" innerClassName="max-w-3xl text-center">
+        <Reveal>
+          <h1 className="text-display-lg text-ink md:text-hero">{t.benefits.title}</h1>
+          <p className="mx-auto mt-5 max-w-[44ch] text-lead-airy text-ink-muted">
+            {t.benefits.subtitle}
+          </p>
+        </Reveal>
+      </Tile>
 
-      <section className="border-t border-border bg-muted/40">
-        <div className="mx-auto grid max-w-5xl gap-8 px-6 py-20 sm:grid-cols-2">
-          <div className="rounded-xl border border-border bg-background p-8">
-            <h2 className="text-xl font-bold tracking-tight">For Companies</h2>
-            <ul className="mt-6 space-y-3">
-              {companyBenefits.map((item) => (
-                <li key={item} className="flex gap-3 text-sm text-muted-foreground">
-                  <span className="text-primary">✓</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
+      {/* The surface change between these two tiles is what separates the audiences. */}
+      <Tile surface="parchment" innerClassName="max-w-3xl">
+        <Reveal>
+          <h2 className="text-display-md text-ink md:text-display-lg">
+            {t.benefits.companies.heading}
+          </h2>
+          <BenefitList items={t.benefits.companies.items} tone="light" />
+        </Reveal>
+      </Tile>
 
-          <div className="rounded-xl border border-border bg-background p-8">
-            <h2 className="text-xl font-bold tracking-tight">For Employees</h2>
-            <ul className="mt-6 space-y-3">
-              {employeeBenefits.map((item) => (
-                <li key={item} className="flex gap-3 text-sm text-muted-foreground">
-                  <span className="text-primary">✓</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
+      <Tile surface="dark" innerClassName="max-w-3xl">
+        <Reveal>
+          <h2 className="text-display-md text-on-dark md:text-display-lg">
+            {t.benefits.employees.heading}
+          </h2>
+          <BenefitList items={t.benefits.employees.items} tone="dark" />
+        </Reveal>
+      </Tile>
     </>
   );
 }

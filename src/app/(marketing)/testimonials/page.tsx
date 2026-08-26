@@ -1,23 +1,32 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import { Reveal } from '@/components/reveal';
+import { Tile } from '@/components/tile';
 import { Button } from '@/components/ui/button';
+import { getTranslations } from '@/lib/i18n/get-locale';
 
 export const metadata: Metadata = {
-  title: 'Testimonials — Kelas AI',
+  title: 'Testimonials: Kelas AI',
 };
 
-export default function TestimonialsPage() {
+/*
+  Deliberately empty of quotes. The business is onboarding its first cohorts,
+  so this page says so plainly rather than showing invented client stories.
+  The CTA label matches the contact CTA used everywhere else on the site.
+*/
+export default async function TestimonialsPage() {
+  const { t } = await getTranslations();
+
   return (
-    <section className="mx-auto max-w-2xl px-6 py-24 text-center">
-      <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Testimonials</h1>
-      <p className="mt-6 text-lg text-muted-foreground">
-        We&apos;re onboarding our first cohorts now — client stories and logos will appear here as
-        companies complete their onsite training.
-      </p>
-      <div className="mt-8">
-        <Button size="lg" render={<Link href="/consultation">Be an early customer</Link>} />
-      </div>
-    </section>
+    <Tile surface="canvas" innerClassName="max-w-2xl text-center">
+      <Reveal>
+        <h1 className="text-display-lg text-ink md:text-hero">{t.testimonials.title}</h1>
+        <p className="mt-5 text-lead-airy text-ink-muted">{t.testimonials.description}</p>
+        <div className="mt-8">
+          <Button render={<Link href="/consultation">{t.common.bookConsultation}</Link>} />
+        </div>
+      </Reveal>
+    </Tile>
   );
 }

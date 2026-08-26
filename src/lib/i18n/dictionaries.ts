@@ -1,0 +1,1439 @@
+export type Locale = 'en' | 'id';
+
+/*
+  `en` is the shape of truth: `Dictionary` is inferred from it, so `id` must
+  match it key for key or TypeScript rejects the build. No `as const`, so
+  fields widen to `string` instead of locking to English literals.
+*/
+const en = {
+  common: {
+    logIn: 'Log In',
+    signUp: 'Sign Up',
+    bookConsultation: 'Book a Consultation',
+    roleLabel: {
+      editor: 'Editor',
+      student: 'Student',
+    },
+  },
+  nav: {
+    howItWorks: 'How It Works',
+    programs: 'Programs',
+    pricing: 'Pricing',
+    faq: 'FAQ',
+  },
+  footer: {
+    tagline: 'From AI awareness to AI adoption, for teams that need it to stick.',
+    columnProgram: 'Program',
+    columnCompany: 'Company',
+    columnAccount: 'Account',
+    benefits: 'Benefits',
+    testimonials: 'Testimonials',
+    copyright: 'Copyright {year} Kelas AI. All rights reserved.',
+  },
+  home: {
+    hero: {
+      title: 'From AI awareness to AI adoption',
+      subtitle:
+        'Onsite AI training for your team, backed by a platform that turns one workshop into a daily habit.',
+      ctaPricing: 'See Pricing',
+      ctaConsultation: 'Book a Consultation',
+    },
+    tools: {
+      heading: 'Training built around the tools your team already has',
+    },
+    programs: {
+      heading: 'Programs for every team',
+      description:
+        'One onsite engagement, curriculum mapped to how each part of your team actually spends its day.',
+      cta: 'See How It Works',
+      items: [
+        {
+          title: 'AI for Productivity',
+          description:
+            'Cut time on writing, research, and admin work with prompts built for daily tasks.',
+        },
+        {
+          title: 'AI for Data & Analysis',
+          description:
+            'Turn spreadsheets and reports into faster answers without writing a formula from scratch.',
+        },
+        {
+          title: 'AI for Marketing & Content',
+          description:
+            'Draft copy, campaign briefs, and content variations in a fraction of the time.',
+        },
+        {
+          title: 'AI for Customer Support',
+          description:
+            'Faster first-response drafting from a knowledge base your whole team can query.',
+        },
+        {
+          title: 'AI for HR & People Ops',
+          description: 'Speed up job descriptions, screening notes, and onboarding material.',
+        },
+        {
+          title: 'AI for Engineering',
+          description:
+            'Code assistance, technical documentation, and rollout planning for teams shipping with AI.',
+        },
+      ],
+    },
+    howItWorks: {
+      heading: 'How it works',
+      description: 'The training happens onsite. The platform is what keeps it alive afterward.',
+      steps: [
+        {
+          title: 'Train onsite, in person',
+          description:
+            'A human instructor runs a hands-on AI session at your office. Not a pre-recorded course. Your team learns by doing, together.',
+        },
+        {
+          title: 'Keep the material after the room clears',
+          description:
+            'Employees get the lessons, guided assignments, and prompting templates as a place to keep practicing, rather than a new course to enroll in.',
+        },
+        {
+          title: 'Build the habit week by week',
+          description:
+            'Short assignments and a searchable resource library turn one training day into a recurring habit of reaching for AI at work.',
+        },
+        {
+          title: 'See adoption, not attendance',
+          description:
+            'Your instructor tracks activity after the onsite date, which is the real signal of whether the training changed daily behavior.',
+        },
+      ],
+    },
+    trainingFormat: {
+      heading: 'Choose the Training Format That Fits Your Team',
+      recommended: 'Recommended',
+      compareCta: 'Compare Delivery Method Details',
+      formats: {
+        onsite: {
+          title: 'Onsite Training',
+          description: 'An instructor is on-site in person for intensive, hands-on training.',
+          badge: 'At Your Office',
+        },
+        online: {
+          title: 'Online Live Training',
+          description: 'Interactive sessions over Zoom/Google Meet, recordings included.',
+          badge: 'Zoom / Google Meet',
+        },
+        hybrid: {
+          title: 'Hybrid Training',
+          description:
+            'Online theory combined with in-person practice, flexible for distributed teams.',
+          badge: 'Flexible',
+        },
+      },
+    },
+    habit: {
+      heading: 'Most training fades in a week',
+      description:
+        'Once the onsite date passes, the platform keeps nudging. Unfinished modules resurface, new templates land, and practice stays on the calendar instead of fading out.',
+    },
+    pricing: {
+      heading: 'Pricing',
+      description:
+        'Creating an account is free. One All-Access package unlocks every module — pay once, keep it forever.',
+      packageName: 'All-Access Package',
+      packageTagline: 'One payment. Every module, forever.',
+      priceNote: 'One-time payment, no recurring charges',
+      cta: 'Get Started',
+      features: [
+        'Every module in the library, including everything added after you join',
+        'Progress tracking, assignments, and grading feedback',
+        'The resource library of prompt templates and guides',
+      ],
+    },
+    faq: {
+      heading: 'Questions',
+      items: [
+        {
+          question: 'Is the platform a replacement for the onsite training?',
+          answer:
+            'No. The platform is a companion to the onsite session, not a replacement for it. The core training is still delivered in person by an instructor.',
+        },
+        {
+          question: 'Can employees use the platform without attending the onsite session?',
+          answer:
+            'Yes. The All-Access package works self-serve — it unlocks every module the moment you pay, independent of any cohort or onsite date. Joining a cohort is optional and just adds you to that onsite batch’s roster and schedule.',
+        },
+        {
+          question: 'How is pricing structured?',
+          answer:
+            'Creating an account is free. There is a single All-Access package, paid once, that unlocks every module in the library — no per-cohort pricing and no recurring subscription to manage. For a rollout across several teams, book a consultation instead.',
+        },
+        {
+          question: 'Can we bring our own curriculum?',
+          answer:
+            'Yes. Your instructor authors and publishes modules, which then become part of the All-Access library for everyone, and can adapt them to your team and role mix before an onsite date.',
+        },
+        {
+          question: 'Does access ever expire?',
+          answer:
+            'No. All-Access is a one-time payment that keeps working forever, including for modules published after you bought it. Nothing is locked away once an onsite day has passed.',
+        },
+      ],
+    },
+    close: {
+      heading: 'We are booking our first cohorts',
+      description:
+        'Tell us your team size and what they do all day, and we will map a curriculum to it.',
+    },
+  },
+  benefits: {
+    title: 'Benefits',
+    subtitle: 'One engagement, two audiences. Here is what each side actually gets.',
+    companies: {
+      heading: 'For companies',
+      items: [
+        'Visibility into whether training changed daily behavior, not just who attended',
+        'Progress and submission tracking for every cohort you run',
+        'A curriculum mapped to your team rather than a generic syllabus',
+        'Material and templates stay available long after the onsite day',
+      ],
+    },
+    employees: {
+      heading: 'For employees',
+      items: [
+        'Practical AI skills you can use the same day, not abstract theory',
+        'A place to revisit the training material whenever you need it',
+        'Prompting templates and guides for your actual day-to-day tasks',
+        'Real written feedback from your instructor, not just a quiz score',
+      ],
+    },
+  },
+  testimonials: {
+    title: 'Testimonials',
+    description:
+      'We are onboarding our first cohorts now. Client stories will appear here as companies finish their onsite training.',
+  },
+  consultation: {
+    title: 'Book a consultation',
+    description:
+      'Tell us about your team and what they do all day. We will map a curriculum to it and come back with dates.',
+    form: {
+      name: 'Name',
+      company: 'Company',
+      email: 'Work email',
+      seats: 'Approximate team size',
+      submit: 'Send Request',
+      submitPending: 'Sending',
+    },
+  },
+  auth: {
+    genericError: 'Something went wrong. Please try again.',
+    login: {
+      title: 'Sign in',
+      subtitle: 'Welcome back to Kelas AI.',
+      email: 'Email',
+      password: 'Password',
+      forgotPassword: 'Forgot password?',
+      submit: 'Sign in',
+      submitPending: 'Signing in…',
+      noAccount: 'New here?',
+      createAccount: 'Create a Student account',
+    },
+    signup: {
+      title: 'Create your account',
+      subtitle: 'Sign up as a Student to browse and join cohorts.',
+      name: 'Name',
+      email: 'Email',
+      password: 'Password',
+      submit: 'Create account',
+      submitPending: 'Creating account…',
+      haveAccount: 'Already have an account?',
+      signIn: 'Sign in',
+    },
+    forgotPassword: {
+      title: 'Reset your password',
+      subtitle: "Enter your email and we'll send you a link to set a new password.",
+      email: 'Email',
+      submit: 'Send reset link',
+      submitPending: 'Sending…',
+      backToSignIn: 'Back to sign in',
+      checkEmailTitle: 'Check your email',
+      checkEmailDescription:
+        'If an account exists for {email}, we sent a link to set a new password.',
+    },
+    resetPassword: {
+      title: 'Set your password',
+      subtitle: 'Choose a password for your account.',
+      newPassword: 'New password',
+      confirmPassword: 'Confirm password',
+      submit: 'Set password',
+      submitPending: 'Saving…',
+      passwordTooShort: 'Password must be at least {min} characters.',
+      passwordMismatch: 'Passwords do not match.',
+      linkInvalidTitle: 'Link expired or invalid',
+      linkInvalidDescription:
+        'This set-password link is missing or no longer valid. Request a new one to continue.',
+      requestNewLink: 'Request a new link',
+    },
+  },
+  app: {
+    nav: {
+      editor: {
+        dashboard: 'Dashboard',
+        contentLibrary: 'Content Library',
+        cohorts: 'Cohorts',
+        gradingQueue: 'Grading Queue',
+        resourceLibrary: 'Resource Library',
+      },
+      student: {
+        dashboard: 'Dashboard',
+        learningModules: 'Learning Modules',
+        assignments: 'Assignments',
+        myProgress: 'My Progress',
+        resourceLibrary: 'Resource Library',
+        getAllAccess: 'Get All-Access',
+        manageSubscription: 'Manage Subscription',
+      },
+    },
+    sidebar: {
+      profile: 'Profile',
+      logout: 'Logout',
+      signingOut: 'Signing out...',
+      collapseSidebar: 'Collapse sidebar',
+      expandSidebar: 'Expand sidebar',
+      closeMenu: 'Close menu',
+    },
+    allAccessBadge: 'All-Access',
+    noAccessUpgrade: 'No Access · Upgrade',
+  },
+  student: {
+    dashboard: {
+      greeting: 'Hello, {name} 👋',
+      subtitle: 'Here is an overview of your learning journey and upcoming activities.',
+      learningProgress: 'Learning Progress',
+      seeAll: 'See all',
+      defaultModuleDescription: 'Study this material to build your skills in this area.',
+      printCertificate: 'Print Certificate',
+      continueLearning: 'Continue Learning',
+      noModulesLearned: 'No classes started yet.',
+      getAllAccessToUnlock: 'Get All-Access to unlock every module.',
+      upcomingZoom: 'Upcoming Zoom',
+      seminarBadge: 'Seminar',
+      onsiteSessionTitle: 'Onsite Session: {name}',
+      closingSessionTitle: 'Closing Session & Q&A - {name}',
+      online: 'Online',
+      noUpcomingEvents: 'No upcoming events yet.',
+      otherActivity: 'Other Activity',
+      milestoneBadge: 'Milestone 1: First Class',
+      startJourney: 'Start Your Learning Journey',
+      startJourneyDescription:
+        'Complete your first class to unlock the next stage and build your foundation.',
+      yourProgress: 'Your Progress',
+      viewHistory: 'View history',
+      checkInDescription:
+        'Regular check-ins build a steady learning rhythm, keeping you more consistent and focused.',
+      allAccessPackage: 'All-Access Package',
+      fullAccessDescription: 'You already have full access to every module in the library.',
+      manageSubscription: 'Manage Subscription',
+      getFullAccessDescription:
+        'Pay once to get full access to every module in the library, with no additional cost.',
+      lifetimeAccess: 'Lifetime access to every module',
+      globalCertificate: 'Globally recognized certificate',
+      discussionForum: 'Discussion forum & code review',
+      getAllAccessCta: 'Get All-Access',
+    },
+    modules: {
+      title: 'Learning Modules',
+      subtitle: 'Everything in your All-Access package.',
+      getAllAccessTitle: 'Get All-Access to unlock every module.',
+      getAllAccessDescription:
+        'One package, paid once, unlocks the entire content library — forever.',
+      getAllAccessCta: 'Get All-Access',
+      nothingPublished: 'Nothing published yet.',
+      lockedPrereq: 'Locked · complete "{title}" first',
+      locked: 'Locked',
+      continueLearning: 'Continue Learning',
+      continueCta: 'Continue',
+      sessionsCount: (count: number) => `${count} session${count === 1 ? '' : 's'}`,
+      statusNotStarted: 'Not started',
+      statusInProgress: 'In progress',
+      statusCompleted: 'Completed',
+    },
+    moduleDetail: {
+      getAllAccessToUnlockThis: 'Get All-Access to unlock this module.',
+      lockedTitle: 'This module is locked.',
+      lockedDescription: 'Complete "{title}" first to unlock it.',
+      courseContent: 'Course content',
+      noSessionsYet: 'No sessions in this module yet.',
+      lessonKindLabel: {
+        Objectives: 'Learning Objectives',
+        Summary: 'Concept Summary',
+        Practice: 'Practice Instructions',
+        Supplementary: 'Supplementary Material',
+      },
+      done: 'Done',
+      open: 'Open {type}',
+      markComplete: 'Mark next content block complete',
+      advancedMaterial: 'Advanced module material',
+      graded: 'Graded',
+      pass: 'Pass',
+      fail: 'Fail',
+      dueLabel: '· due',
+      overallProgress: 'Overall progress',
+      statusNotSubmitted: 'Not submitted',
+      statusSubmitted: 'Submitted',
+      overdue: 'Overdue',
+      contentTypeLabel: { Text: 'Reading', Video: 'Video', File: 'File' },
+      assignmentItemLabel: 'Assignment',
+      goToNextItem: 'Go to next item',
+      backToModules: 'Back to modules',
+    },
+    submitAssignment: {
+      yourAnswer: 'Your answer',
+      urlPlaceholder: '{type} URL',
+      submitting: 'Submitting…',
+      resubmit: 'Resubmit',
+      submit: 'Submit',
+    },
+    assignments: {
+      title: 'Assignments',
+      subtitle: 'Everything assigned across your modules.',
+      getAllAccessTitle: 'Get All-Access to see your assignments.',
+      getAllAccessCta: 'Get All-Access',
+      none: 'No assignments yet.',
+      advancedMaterialSuffix: ' · advanced module material',
+      statusGraded: 'Graded',
+      statusSubmitted: 'Submitted',
+      statusNotStarted: 'Not started',
+      filterAll: 'All',
+      filterNotStarted: 'To do',
+      filterSubmitted: 'Submitted',
+      filterGraded: 'Graded',
+      dueLabel: '· due',
+      overdue: 'Overdue',
+      pass: 'Pass',
+      fail: 'Fail',
+    },
+    progress: {
+      title: 'Learning Progress',
+      getAllAccessTitle: 'Get All-Access to track your progress.',
+      getAllAccessCta: 'Get All-Access',
+      activeTab: 'Classes In Progress',
+      completedTab: 'Completed Classes',
+      empty: 'No classes in this category.',
+    },
+    resources: {
+      title: 'AI Resource Library',
+      getAllAccessTitle: 'Get All-Access to browse the resource library.',
+      getAllAccessCta: 'Get All-Access',
+      subtitle: 'Tips, prompting templates, and guides.',
+      searchPlaceholder: 'Search title…',
+      allTypes: 'All types',
+      filter: 'Filter',
+      none: 'Nothing matches yet.',
+      resultsCount: (count: number) => `${count} resource${count === 1 ? '' : 's'}`,
+    },
+    checkout: {
+      title: 'Checkout',
+      description:
+        'Complete your {package} purchase — pay once to access every module in the library forever.',
+      panel: {
+        packageName: 'All-Access Package',
+        accessDescription: 'Access to every module, forever',
+        oneTimePayment: 'Pay once. No monthly subscription.',
+        features: [
+          'Permanent access to all material',
+          'Regular content and module updates',
+          'Discussion forum & code review',
+          'Full prompting template library',
+        ],
+        getAccessCta: 'Get Access',
+        dialogTitle: 'Payment Details',
+        badge: 'One-time payment',
+        price: 'Price',
+        promoLabel: 'Promo {code}',
+        total: 'Total',
+        promoCodeLabel: 'Promo code',
+        promoPlaceholder: 'Enter promo code',
+        remove: 'Remove',
+        apply: 'Apply',
+        promoApplied: 'Promo code applied successfully.',
+        promoEmpty: 'Enter a promo code.',
+        promoInvalid: 'Invalid promo code.',
+        processing: 'Processing…',
+        payFree: 'Register Free',
+        payNow: 'Pay Now',
+        genericServerError: 'A server error occurred. Please try again.',
+        genericError: 'Something went wrong. Please try again.',
+      },
+    },
+    manageSubscription: {
+      title: 'Manage Subscription',
+      subtitle: 'You have lifetime All-Access — no renewal or monthly fee required.',
+      statusLabel: 'Status',
+      statusActive: 'Active · Lifetime',
+      purchasedOn: 'Purchased on',
+      amountPaid: 'Amount paid',
+      freeViaPromo: 'Free (promo code {code})',
+      lifetimeNote:
+        'This is a one-time purchase, not a recurring subscription — there is nothing to renew or cancel.',
+      backToModules: 'Go to Learning Modules',
+    },
+    dailyCheckin: {
+      title: 'Daily Check-in',
+      close: 'Close',
+      date: 'Date',
+      moodLabel: 'How are you feeling today',
+      moodBad: 'Bad',
+      moodNeutral: 'Okay',
+      moodGood: 'Good',
+      directionLabel: "What you're studying today",
+      selectClassLabel: 'Choose the class you studied',
+      selectClassPlaceholder: 'Search or choose a class',
+      reflectionLabel: 'Reflection',
+      reflectionPlaceholder:
+        '• Feelings/insights about your learning progress\n• Challenges you ran into\n• Plans or something new you want to try',
+      reflectionMinChars: '{count}/100 characters minimum',
+      cancel: 'Cancel',
+      send: 'Send',
+      writeCheckIn: 'Write Check-in',
+    },
+    subscriptionPopup: {
+      title: 'Get the All-Access Package',
+      description:
+        'Level up your learning experience. Pay once to get full access to every module in the library, with no additional cost.',
+      cta: 'Subscribe Now',
+    },
+  },
+  editor: {
+    dashboard: {
+      title: 'Content & grading dashboard',
+      summary: (cohorts: number, submissions: number) =>
+        `${cohorts} cohort${cohorts === 1 ? '' : 's'} · ${submissions} submission${submissions === 1 ? '' : 's'} awaiting grading`,
+      yourCohorts: 'Your cohorts',
+      noCohortsYet: 'No cohorts yet. Create one to start publishing content.',
+      gradingQueue: 'Grading queue',
+      nothingPending: 'Nothing pending. You are caught up.',
+      yourModules: 'Your modules',
+      noModulesYet: "You haven't authored any modules yet.",
+    },
+    modules: {
+      title: 'Content Library',
+      subtitle:
+        'Author modules, add lessons and assignments, then publish for every All-Access Student.',
+      noModules: 'No modules yet. Create one above.',
+      countsSummary: (sessions: number, lessons: number, assignments: number) =>
+        `${sessions} session${sessions === 1 ? '' : 's'} · ${lessons} lesson${lessons === 1 ? '' : 's'} · ${assignments} assignment${assignments === 1 ? '' : 's'}`,
+      requiresSuffix: (title: string) => ` · requires "${title}"`,
+      published: 'Published',
+      draft: 'Draft',
+      createForm: {
+        heading: 'New module',
+        titleLabel: 'Title',
+        titlePlaceholder: 'Module 1: AI Foundations & Safety',
+        descriptionLabel: 'Description',
+        descriptionPlaceholder: 'Optional',
+        prerequisiteLabel: 'Requires module (optional)',
+        noPrerequisite: 'None — unlocked from the start',
+        creating: 'Creating…',
+        submit: 'Create Module',
+      },
+    },
+    moduleDetail: {
+      requiresPrefix: (title: string) => `Requires "${title}" to be completed first.`,
+      sessionsHeading: (count: number) => `Sessions (${count})`,
+      noSessions: 'No sessions yet.',
+      contentBlocksHeading: (count: number) => `Content blocks (${count})`,
+      noContentBlocks: 'No content blocks yet.',
+      assignmentsHeading: (count: number) => `Assignments (${count})`,
+      noAssignments: 'No assignments yet.',
+      visibility: 'Visibility',
+      visiblePublished: 'Visible to every Student with All-Access.',
+      visibleDraft: 'Draft — only you can see this module.',
+      dueLabel: '· due',
+      advancedMaterialSuffix: ' · advanced module material',
+      curriculum: 'Curriculum',
+      sessionSummary: (lessonCount: number, assignmentCount: number) =>
+        `${lessonCount} lesson${lessonCount === 1 ? '' : 's'} · ${assignmentCount} assignment${assignmentCount === 1 ? '' : 's'}`,
+      emptyStateTitle: 'Start building this module',
+      emptyStateDescription:
+        'Add your first session on the left to begin adding lessons and assignments.',
+      addSessionForm: {
+        heading: 'Add session',
+        titleLabel: 'Title',
+        titlePlaceholder: 'Session 1: ...',
+        adding: 'Adding…',
+        submit: 'Add Session',
+      },
+      addLessonForm: {
+        heading: 'Add content block',
+        titleLabel: 'Title',
+        kindLabel: 'Role in the session',
+        typeLabel: 'Type',
+        contentLabel: 'Content / URL',
+        adding: 'Adding…',
+        submit: 'Add Lesson',
+      },
+      addAssignmentForm: {
+        heading: 'Add assignment',
+        instructionsLabel: 'Instructions',
+        submissionTypeLabel: 'Submission type',
+        dueDateLabel: 'Due date (optional)',
+        advancedCheckboxLabel: 'Advanced module material (reused for a future automation module)',
+        adding: 'Adding…',
+        submit: 'Add Assignment',
+      },
+      publishForm: {
+        saving: 'Saving…',
+        unpublish: 'Unpublish',
+        publish: 'Publish',
+      },
+    },
+    studio: {
+      statusDraft: 'Draft',
+      statusPublished: 'Published',
+      previewCta: 'Preview',
+      tabs: {
+        outline: 'Outline',
+        preview: 'Student preview',
+        settings: 'Visibility & prerequisites',
+      },
+      eyebrow: (published: boolean) =>
+        `MODULE · ${published ? 'PUBLISHED' : 'DRAFT'} · ALL-ACCESS STUDENTS`,
+      noDescription: 'No description yet. Add one so students know what this module covers.',
+      itemsSummary: (items: number, sessions: number) =>
+        `${items} item${items === 1 ? '' : 's'} · ${sessions} session${sessions === 1 ? '' : 's'}`,
+      noSessions: 'No sessions yet. Add the first one to start building this module.',
+      noItemsInSession: 'No content blocks or assignments in this session yet.',
+      open: 'Open',
+      addSession: 'Add session',
+      itemKind: {
+        reading: 'Reading',
+        video: 'Video',
+        file: 'File',
+        assignment: 'Assignment',
+      },
+      itemState: {
+        ready: 'Ready',
+        needsContent: 'Needs content',
+        advanced: 'Advanced material',
+      },
+      dueLabel: 'due',
+      readiness: 'Publish readiness',
+      checks: {
+        description: 'Module has a description',
+        descriptionOk: 'Written',
+        descriptionMissing: 'Still empty',
+        sessionsHaveContent: 'Every session has content',
+        blocksFilled: 'Every content block is filled in',
+        hasAssignment: 'Module has at least one assignment',
+        countOf: (done: number, total: number) => `${done} of ${total}`,
+        none: 'None yet',
+        present: 'Present',
+      },
+      contentStats: 'Module content',
+      statSessions: 'sessions',
+      statBlocks: 'content blocks',
+      statAssignments: 'assignments',
+      backToOutline: 'Module outline',
+      sessionEyebrow: (order: number) => `SESSION ${order}`,
+      contentBlocks: 'Content blocks',
+      assignments: 'Assignments',
+      previewNotice: 'STUDENT VIEW PREVIEW · DOES NOT AFFECT DATA',
+      previewLocked: 'Students see this module as locked until they finish the prerequisite.',
+      previewEmpty: 'Nothing to preview yet — add a session with content first.',
+      previewProgress: '0% complete · not started',
+      previewItemCount: (current: number, total: number) => `ITEM ${current} OF ${total}`,
+      previewMarkDone: 'Mark complete',
+      previewNext: 'Next item',
+      settingsTitle: 'Visibility & prerequisites',
+      settingsSubtitle:
+        'Controls who can see this module and what a student must finish before it unlocks.',
+      visibilityLabel: 'Visibility',
+      visibilityNote: 'A published module is visible to every Student with All-Access.',
+      prerequisiteLabel: 'Prerequisite',
+      prerequisiteNote: 'The module a student must complete at 100% before this one opens.',
+      prerequisiteNone: 'None — open from the start',
+      prerequisiteSaving: 'Saving…',
+      prerequisiteSubmit: 'Save prerequisite',
+      noOtherModules: 'You have no other modules to require yet.',
+    },
+    cohorts: {
+      title: 'Cohorts',
+      subtitle:
+        'Create a cohort to schedule an onsite session and its roster. Content access comes from the All-Access package, not from cohort membership.',
+      noCohorts: 'No cohorts yet. Create one above.',
+      onsitePrefix: 'Onsite',
+      studentsCountSuffix: (count: number) => `${count} student${count === 1 ? '' : 's'}`,
+      createForm: {
+        heading: 'New cohort',
+        nameLabel: 'Name',
+        namePlaceholder: 'Q1 AI Onsite',
+        dateLabel: 'Onsite date',
+        creating: 'Creating…',
+        submit: 'Create Cohort',
+      },
+      detail: {
+        studentsHeading: (count: number) => `Students (${count})`,
+        noStudents: 'No students enrolled yet.',
+        allAccess: 'All-Access',
+        noAccess: 'No Access',
+        remove: 'Remove',
+        addMemberForm: {
+          emailLabel: 'Student email',
+          emailPlaceholder: 'student@example.com',
+          adding: 'Adding…',
+          submit: 'Add',
+        },
+      },
+    },
+    grading: {
+      title: 'Grading Queue',
+      subtitleCount: (count: number) =>
+        `${count} submission${count === 1 ? '' : 's'} awaiting grading across your modules.`,
+      nothingPending: 'Nothing pending. You are caught up.',
+      advancedMaterialSuffix: ' · advanced module material',
+      form: {
+        scorePlaceholder: 'Score',
+        noPassFail: 'No pass/fail',
+        pass: 'Pass',
+        fail: 'Fail',
+        feedbackPlaceholder: 'Feedback (optional)',
+        grading: 'Grading…',
+        submit: 'Grade',
+      },
+    },
+    resources: {
+      title: 'Resource Library',
+      subtitle: 'Tips, templates, and guides, visible to every student on the platform.',
+      nothingPublished: 'Nothing published yet.',
+      createForm: {
+        heading: 'New resource',
+        typeLabel: 'Type',
+        titleLabel: 'Title',
+        contentLabel: 'Content',
+        tagsLabel: 'Tags (comma separated)',
+        tagsPlaceholder: 'prompting, basics',
+        publishing: 'Publishing…',
+        submit: 'Publish Resource',
+      },
+    },
+  },
+};
+
+export type Dictionary = typeof en;
+
+const id: Dictionary = {
+  common: {
+    logIn: 'Masuk',
+    signUp: 'Daftar',
+    bookConsultation: 'Jadwalkan Konsultasi',
+    roleLabel: {
+      editor: 'Editor',
+      student: 'Peserta',
+    },
+  },
+  nav: {
+    howItWorks: 'Cara Kerja',
+    programs: 'Program',
+    pricing: 'Harga',
+    faq: 'FAQ',
+  },
+  footer: {
+    tagline: 'Dari kesadaran AI menuju adopsi AI, untuk tim yang butuh kebiasaan yang menetap.',
+    columnProgram: 'Program',
+    columnCompany: 'Perusahaan',
+    columnAccount: 'Akun',
+    benefits: 'Manfaat',
+    testimonials: 'Testimoni',
+    copyright: 'Hak cipta {year} Kelas AI. Seluruh hak dilindungi.',
+  },
+  home: {
+    hero: {
+      title: 'Dari kesadaran AI menuju adopsi AI',
+      subtitle:
+        'Pelatihan AI tatap muka untuk tim Anda, didukung platform yang mengubah satu sesi pelatihan menjadi kebiasaan harian.',
+      ctaPricing: 'Lihat Harga',
+      ctaConsultation: 'Jadwalkan Konsultasi',
+    },
+    tools: {
+      heading: 'Pelatihan yang dirancang untuk perangkat yang sudah dipakai tim Anda',
+    },
+    programs: {
+      heading: 'Program untuk setiap tim',
+      description:
+        'Satu program tatap muka, kurikulum disesuaikan dengan cara kerja setiap bagian tim Anda sehari-hari.',
+      cta: 'Lihat Cara Kerja',
+      items: [
+        {
+          title: 'AI untuk Produktivitas',
+          description:
+            'Pangkas waktu untuk menulis, riset, dan pekerjaan administratif dengan prompt yang dirancang untuk tugas harian.',
+        },
+        {
+          title: 'AI untuk Data & Analisis',
+          description:
+            'Ubah spreadsheet dan laporan menjadi jawaban lebih cepat tanpa perlu menulis rumus dari nol.',
+        },
+        {
+          title: 'AI untuk Marketing & Konten',
+          description:
+            'Susun copy, brief kampanye, dan variasi konten dalam waktu yang jauh lebih singkat.',
+        },
+        {
+          title: 'AI untuk Layanan Pelanggan',
+          description:
+            'Percepat draf respons pertama dari basis pengetahuan yang bisa diakses seluruh tim.',
+        },
+        {
+          title: 'AI untuk HR & People Ops',
+          description:
+            'Percepat pembuatan deskripsi pekerjaan, catatan seleksi, dan materi onboarding.',
+        },
+        {
+          title: 'AI untuk Engineering',
+          description:
+            'Bantuan coding, dokumentasi teknis, dan perencanaan rollout untuk tim yang membangun dengan AI.',
+        },
+      ],
+    },
+    howItWorks: {
+      heading: 'Cara kerjanya',
+      description:
+        'Pelatihan berlangsung tatap muka. Platform inilah yang menjaganya tetap hidup setelahnya.',
+      steps: [
+        {
+          title: 'Latihan tatap muka, langsung di lokasi',
+          description:
+            'Instruktur memandu sesi AI langsung di kantor Anda. Bukan kursus rekaman. Tim Anda belajar sambil praktik, bersama-sama.',
+        },
+        {
+          title: 'Materi tetap tersedia setelah sesi selesai',
+          description:
+            'Karyawan mendapatkan materi, tugas terbimbing, dan template prompt sebagai tempat untuk terus berlatih, bukan kursus baru yang harus didaftarkan.',
+        },
+        {
+          title: 'Bangun kebiasaan minggu demi minggu',
+          description:
+            'Tugas singkat dan pustaka sumber daya yang bisa dicari mengubah satu hari pelatihan menjadi kebiasaan rutin menggunakan AI di tempat kerja.',
+        },
+        {
+          title: 'Lihat adopsi, bukan sekadar kehadiran',
+          description:
+            'Instruktur Anda memantau aktivitas setelah sesi tatap muka, karena itulah sinyal sesungguhnya apakah pelatihan mengubah perilaku harian.',
+        },
+      ],
+    },
+    trainingFormat: {
+      heading: 'Pilih Format Pelatihan yang Sesuai Tim Anda',
+      recommended: 'Direkomendasikan',
+      compareCta: 'Bandingkan Detail Metode Pelaksanaan',
+      formats: {
+        onsite: {
+          title: 'Pelatihan Tatap Muka (On-site)',
+          description: 'Instruktur hadir langsung di lokasi untuk pelatihan intensif.',
+          badge: 'Lokasi Perusahaan',
+        },
+        online: {
+          title: 'Pelatihan Daring (Online Live)',
+          description: 'Sesi interaktif via Zoom/Google Meet, lengkap dengan rekaman.',
+          badge: 'Zoom / Google Meet',
+        },
+        hybrid: {
+          title: 'Pelatihan Kombinasi (Hybrid)',
+          description:
+            'Gabungan teori daring dan praktik tatap muka, fleksibel untuk tim tersebar.',
+          badge: 'Fleksibel',
+        },
+      },
+    },
+    habit: {
+      heading: 'Sebagian besar pelatihan memudar dalam seminggu',
+      description:
+        'Setelah sesi tatap muka berlalu, platform ini terus mengingatkan. Modul yang belum selesai muncul kembali, template baru hadir, dan latihan tetap ada di kalender alih-alih menghilang.',
+    },
+    pricing: {
+      heading: 'Harga',
+      description:
+        'Membuat akun gratis. Satu paket All-Access membuka semua modul — bayar sekali, miliki selamanya.',
+      packageName: 'Paket All-Access',
+      packageTagline: 'Satu kali bayar. Semua modul, selamanya.',
+      priceNote: 'Pembayaran sekali, tanpa biaya berulang',
+      cta: 'Mulai Sekarang',
+      features: [
+        'Semua modul di pustaka, termasuk yang ditambahkan setelah Anda bergabung',
+        'Pelacakan progres, tugas, dan umpan balik penilaian',
+        'Pustaka sumber daya berisi template prompt dan panduan',
+      ],
+    },
+    faq: {
+      heading: 'Pertanyaan',
+      items: [
+        {
+          question: 'Apakah platform ini menggantikan pelatihan tatap muka?',
+          answer:
+            'Tidak. Platform ini adalah pendamping sesi tatap muka, bukan penggantinya. Pelatihan inti tetap disampaikan langsung oleh instruktur.',
+        },
+        {
+          question: 'Bisakah karyawan menggunakan platform tanpa mengikuti sesi tatap muka?',
+          answer:
+            'Bisa. Paket All-Access bersifat mandiri — begitu Anda membayar, semua modul langsung terbuka, terlepas dari batch atau jadwal tatap muka mana pun. Bergabung dengan batch bersifat opsional dan hanya menambahkan Anda ke daftar serta jadwal batch tatap muka tersebut.',
+        },
+        {
+          question: 'Bagaimana struktur harganya?',
+          answer:
+            'Membuat akun gratis. Hanya ada satu paket All-Access, dibayar sekali, yang membuka semua modul di pustaka — tidak ada harga per batch dan tidak ada langganan berulang yang perlu dikelola. Untuk penerapan di beberapa tim sekaligus, jadwalkan konsultasi.',
+        },
+        {
+          question: 'Bisakah kami membawa kurikulum sendiri?',
+          answer:
+            'Bisa. Instruktur Anda menulis dan menerbitkan modul, yang kemudian menjadi bagian dari pustaka All-Access untuk semua orang, dan dapat disesuaikan dengan tim serta kombinasi peran Anda sebelum sesi tatap muka.',
+        },
+        {
+          question: 'Apakah aksesnya bisa kedaluwarsa?',
+          answer:
+            'Tidak. All-Access adalah pembayaran sekali yang berlaku selamanya, termasuk untuk modul yang diterbitkan setelah Anda membeli. Tidak ada yang terkunci setelah hari tatap muka berlalu.',
+        },
+      ],
+    },
+    close: {
+      heading: 'Kami sedang membuka batch pertama',
+      description:
+        'Beri tahu kami jumlah tim Anda dan apa yang mereka kerjakan sehari-hari, dan kami akan menyusun kurikulum yang sesuai.',
+    },
+  },
+  benefits: {
+    title: 'Manfaat',
+    subtitle: 'Satu program, dua pihak. Berikut yang sebenarnya didapatkan masing-masing.',
+    companies: {
+      heading: 'Untuk perusahaan',
+      items: [
+        'Visibilitas apakah pelatihan benar-benar mengubah perilaku harian, bukan sekadar siapa yang hadir',
+        'Pelacakan progres dan pengumpulan tugas untuk setiap batch yang Anda jalankan',
+        'Kurikulum yang disesuaikan dengan tim Anda, bukan silabus umum',
+        'Materi dan template tetap tersedia lama setelah hari tatap muka',
+      ],
+    },
+    employees: {
+      heading: 'Untuk karyawan',
+      items: [
+        'Keterampilan AI praktis yang bisa langsung dipakai hari itu juga, bukan teori abstrak',
+        'Tempat untuk membuka kembali materi pelatihan kapan pun dibutuhkan',
+        'Template prompt dan panduan untuk tugas harian Anda yang sesungguhnya',
+        'Umpan balik tertulis nyata dari instruktur, bukan sekadar skor kuis',
+      ],
+    },
+  },
+  testimonials: {
+    title: 'Testimoni',
+    description:
+      'Kami sedang mengonboarding batch pertama kami. Kisah klien akan muncul di sini seiring perusahaan menyelesaikan pelatihan tatap muka mereka.',
+  },
+  consultation: {
+    title: 'Jadwalkan konsultasi',
+    description:
+      'Ceritakan tentang tim Anda dan apa yang mereka kerjakan sehari-hari. Kami akan menyusun kurikulum yang sesuai dan kembali dengan pilihan jadwal.',
+    form: {
+      name: 'Nama',
+      company: 'Perusahaan',
+      email: 'Email kerja',
+      seats: 'Perkiraan jumlah anggota tim',
+      submit: 'Kirim Permintaan',
+      submitPending: 'Mengirim',
+    },
+  },
+  auth: {
+    genericError: 'Terjadi kesalahan. Silakan coba lagi.',
+    login: {
+      title: 'Masuk',
+      subtitle: 'Selamat datang kembali di Kelas AI.',
+      email: 'Email',
+      password: 'Kata Sandi',
+      forgotPassword: 'Lupa kata sandi?',
+      submit: 'Masuk',
+      submitPending: 'Sedang masuk…',
+      noAccount: 'Baru di sini?',
+      createAccount: 'Buat akun Peserta',
+    },
+    signup: {
+      title: 'Buat akun Anda',
+      subtitle: 'Daftar sebagai Peserta untuk menjelajahi dan bergabung dengan batch.',
+      name: 'Nama',
+      email: 'Email',
+      password: 'Kata Sandi',
+      submit: 'Buat akun',
+      submitPending: 'Membuat akun…',
+      haveAccount: 'Sudah punya akun?',
+      signIn: 'Masuk',
+    },
+    forgotPassword: {
+      title: 'Atur ulang kata sandi',
+      subtitle:
+        'Masukkan email Anda dan kami akan mengirimkan tautan untuk membuat kata sandi baru.',
+      email: 'Email',
+      submit: 'Kirim tautan reset',
+      submitPending: 'Mengirim…',
+      backToSignIn: 'Kembali ke halaman masuk',
+      checkEmailTitle: 'Periksa email Anda',
+      checkEmailDescription:
+        'Jika akun untuk {email} ada, kami telah mengirimkan tautan untuk membuat kata sandi baru.',
+    },
+    resetPassword: {
+      title: 'Atur kata sandi Anda',
+      subtitle: 'Pilih kata sandi untuk akun Anda.',
+      newPassword: 'Kata sandi baru',
+      confirmPassword: 'Konfirmasi kata sandi',
+      submit: 'Atur kata sandi',
+      submitPending: 'Menyimpan…',
+      passwordTooShort: 'Kata sandi minimal {min} karakter.',
+      passwordMismatch: 'Kata sandi tidak cocok.',
+      linkInvalidTitle: 'Tautan kedaluwarsa atau tidak valid',
+      linkInvalidDescription:
+        'Tautan pengaturan kata sandi ini hilang atau sudah tidak berlaku. Minta tautan baru untuk melanjutkan.',
+      requestNewLink: 'Minta tautan baru',
+    },
+  },
+  app: {
+    nav: {
+      editor: {
+        dashboard: 'Dasbor',
+        contentLibrary: 'Pustaka Konten',
+        cohorts: 'Batch',
+        gradingQueue: 'Antrean Penilaian',
+        resourceLibrary: 'Pustaka Sumber Daya',
+      },
+      student: {
+        dashboard: 'Dasbor',
+        learningModules: 'Modul Belajar',
+        assignments: 'Tugas',
+        myProgress: 'Progres Saya',
+        resourceLibrary: 'Pustaka Sumber Daya',
+        getAllAccess: 'Dapatkan All-Access',
+        manageSubscription: 'Kelola Langganan',
+      },
+    },
+    sidebar: {
+      profile: 'Profil',
+      logout: 'Keluar',
+      signingOut: 'Sedang keluar...',
+      collapseSidebar: 'Ciutkan sidebar',
+      expandSidebar: 'Perluas sidebar',
+      closeMenu: 'Tutup menu',
+    },
+    allAccessBadge: 'All-Access',
+    noAccessUpgrade: 'Belum Akses · Upgrade',
+  },
+  student: {
+    dashboard: {
+      greeting: 'Halo, {name} 👋',
+      subtitle: 'Berikut ringkasan perjalanan belajar dan aktivitas mendatang Anda.',
+      learningProgress: 'Progres Belajar',
+      seeAll: 'Lihat semua',
+      defaultModuleDescription:
+        'Pelajari materi ini untuk meningkatkan keahlian Anda di bidang yang diminati.',
+      printCertificate: 'Cetak Sertifikat',
+      continueLearning: 'Lanjutkan Belajar',
+      noModulesLearned: 'Belum ada kelas yang dipelajari.',
+      getAllAccessToUnlock: 'Get All-Access untuk membuka seluruh modul.',
+      upcomingZoom: 'Zoom Mendatang',
+      seminarBadge: 'Seminar',
+      onsiteSessionTitle: 'Sesi Onsite: {name}',
+      closingSessionTitle: 'Sesi Penutupan & Tanya Jawab - {name}',
+      online: 'Online',
+      noUpcomingEvents: 'Belum ada event mendatang.',
+      otherActivity: 'Aktivitas Lain',
+      milestoneBadge: 'Milestone 1: Kelas Pertama',
+      startJourney: 'Mulai Perjalanan Belajarmu',
+      startJourneyDescription:
+        'Selesaikan kelas pertama untuk membuka akses ke tahap selanjutnya dan membangun pondasi.',
+      yourProgress: 'Progress Anda',
+      viewHistory: 'Lihat riwayat',
+      checkInDescription:
+        'Check-in rutin menciptakan ritme belajar yang teratur sehingga membuat Anda lebih konsisten dan terarah.',
+      allAccessPackage: 'Paket All-Access',
+      fullAccessDescription: 'Anda sudah memiliki akses penuh ke seluruh modul di dalam kelas.',
+      manageSubscription: 'Kelola Langganan',
+      getFullAccessDescription:
+        'Cukup bayar satu kali untuk mendapatkan akses penuh ke seluruh modul di dalam kelas tanpa biaya tambahan.',
+      lifetimeAccess: 'Akses selamanya ke semua modul',
+      globalCertificate: 'Sertifikat diakui global',
+      discussionForum: 'Forum diskusi & Code review',
+      getAllAccessCta: 'Dapatkan All-Access',
+    },
+    modules: {
+      title: 'Modul Belajar',
+      subtitle: 'Semua yang termasuk dalam paket All-Access Anda.',
+      getAllAccessTitle: 'Get All-Access untuk membuka seluruh modul.',
+      getAllAccessDescription:
+        'Satu paket, dibayar sekali, membuka seluruh pustaka konten — selamanya.',
+      getAllAccessCta: 'Dapatkan All-Access',
+      nothingPublished: 'Belum ada yang diterbitkan.',
+      lockedPrereq: 'Terkunci · selesaikan "{title}" terlebih dahulu',
+      locked: 'Terkunci',
+      continueLearning: 'Lanjutkan Belajar',
+      continueCta: 'Lanjutkan',
+      sessionsCount: (count: number) => `${count} sesi`,
+      statusNotStarted: 'Belum dimulai',
+      statusInProgress: 'Sedang berlangsung',
+      statusCompleted: 'Selesai',
+    },
+    moduleDetail: {
+      getAllAccessToUnlockThis: 'Get All-Access untuk membuka modul ini.',
+      lockedTitle: 'Modul ini terkunci.',
+      lockedDescription: 'Selesaikan "{title}" terlebih dahulu untuk membukanya.',
+      courseContent: 'Konten kelas',
+      noSessionsYet: 'Belum ada sesi di modul ini.',
+      lessonKindLabel: {
+        Objectives: 'Tujuan Belajar',
+        Summary: 'Ringkasan Konsep',
+        Practice: 'Instruksi Praktik',
+        Supplementary: 'Materi Tambahan',
+      },
+      done: 'Selesai',
+      open: 'Buka {type}',
+      markComplete: 'Tandai konten berikutnya selesai',
+      advancedMaterial: 'Bahan modul lanjutan',
+      graded: 'Dinilai',
+      pass: 'Lulus',
+      fail: 'Tidak Lulus',
+      dueLabel: '· tenggat',
+      overallProgress: 'Progres keseluruhan',
+      statusNotSubmitted: 'Belum dikirim',
+      statusSubmitted: 'Terkirim',
+      overdue: 'Lewat tenggat',
+      contentTypeLabel: { Text: 'Bacaan', Video: 'Video', File: 'Berkas' },
+      assignmentItemLabel: 'Tugas',
+      goToNextItem: 'Lanjut ke item berikutnya',
+      backToModules: 'Kembali ke daftar modul',
+    },
+    submitAssignment: {
+      yourAnswer: 'Jawaban Anda',
+      urlPlaceholder: 'URL {type}',
+      submitting: 'Mengirim…',
+      resubmit: 'Kirim Ulang',
+      submit: 'Kirim',
+    },
+    assignments: {
+      title: 'Tugas',
+      subtitle: 'Semua tugas dari seluruh modul Anda.',
+      getAllAccessTitle: 'Get All-Access untuk melihat tugas Anda.',
+      getAllAccessCta: 'Dapatkan All-Access',
+      none: 'Belum ada tugas.',
+      advancedMaterialSuffix: ' · bahan modul lanjutan',
+      statusGraded: 'Dinilai',
+      statusSubmitted: 'Terkirim',
+      statusNotStarted: 'Belum dimulai',
+      filterAll: 'Semua',
+      filterNotStarted: 'Perlu dikerjakan',
+      filterSubmitted: 'Terkirim',
+      filterGraded: 'Dinilai',
+      dueLabel: '· tenggat',
+      overdue: 'Lewat tenggat',
+      pass: 'Lulus',
+      fail: 'Tidak Lulus',
+    },
+    progress: {
+      title: 'Progres Belajar',
+      getAllAccessTitle: 'Get All-Access untuk melacak progres Anda.',
+      getAllAccessCta: 'Dapatkan All-Access',
+      activeTab: 'Kelas yang Dipelajari',
+      completedTab: 'Kelas yang Diselesaikan',
+      empty: 'Tidak ada kelas di kategori ini.',
+    },
+    resources: {
+      title: 'Pustaka Sumber Daya AI',
+      getAllAccessTitle: 'Dapatkan All-Access untuk membuka pustaka sumber daya.',
+      getAllAccessCta: 'Dapatkan All-Access',
+      subtitle: 'Tips, template prompt, dan panduan.',
+      searchPlaceholder: 'Cari judul…',
+      allTypes: 'Semua jenis',
+      filter: 'Filter',
+      none: 'Belum ada yang cocok.',
+      resultsCount: (count: number) => `${count} sumber daya`,
+    },
+    checkout: {
+      title: 'Checkout',
+      description:
+        'Selesaikan pembelian {package} — cukup bayar sekali untuk mengakses seluruh modul di dalam kelas selamanya.',
+      panel: {
+        packageName: 'Paket All-Access',
+        accessDescription: 'Akses seluruh modul, selamanya',
+        oneTimePayment: 'Sekali bayar. Tidak ada langganan bulanan.',
+        features: [
+          'Akses permanen ke seluruh materi',
+          'Update materi dan modul berkala',
+          'Forum diskusi & Code review',
+          'Template prompting lengkap',
+        ],
+        getAccessCta: 'Dapatkan Akses',
+        dialogTitle: 'Rincian Pembayaran',
+        badge: 'Pembayaran sekali',
+        price: 'Harga',
+        promoLabel: 'Promo {code}',
+        total: 'Total',
+        promoCodeLabel: 'Kode promo',
+        promoPlaceholder: 'Masukkan kode promo',
+        remove: 'Hapus',
+        apply: 'Terapkan',
+        promoApplied: 'Kode promo berhasil diterapkan.',
+        promoEmpty: 'Masukkan kode promo.',
+        promoInvalid: 'Kode promo tidak valid.',
+        processing: 'Memproses…',
+        payFree: 'Daftar Gratis',
+        payNow: 'Bayar Sekarang',
+        genericServerError: 'Terjadi kesalahan pada server. Silakan coba lagi.',
+        genericError: 'Terjadi kesalahan. Silakan coba lagi.',
+      },
+    },
+    manageSubscription: {
+      title: 'Kelola Langganan',
+      subtitle: 'Anda memiliki All-Access seumur hidup — tanpa perpanjangan atau biaya bulanan.',
+      statusLabel: 'Status',
+      statusActive: 'Aktif · Seumur Hidup',
+      purchasedOn: 'Dibeli pada',
+      amountPaid: 'Jumlah dibayar',
+      freeViaPromo: 'Gratis (kode promo {code})',
+      lifetimeNote:
+        'Ini adalah pembelian sekali bayar, bukan langganan berulang — tidak ada yang perlu diperpanjang atau dibatalkan.',
+      backToModules: 'Ke Modul Belajar',
+    },
+    dailyCheckin: {
+      title: 'Daily Check-in',
+      close: 'Tutup',
+      date: 'Tanggal',
+      moodLabel: 'Mood hari ini',
+      moodBad: 'Buruk',
+      moodNeutral: 'Biasa saja',
+      moodGood: 'Baik',
+      directionLabel: 'Arah belajar Anda hari ini',
+      selectClassLabel: 'Pilih kelas yang dipelajari',
+      selectClassPlaceholder: 'Cari atau pilih kelas',
+      reflectionLabel: 'Refleksi diri',
+      reflectionPlaceholder:
+        '• Perasaan/insight mengenai progres belajar\n• Hal-hal yang menjadi tantangan\n• Rencana atau hal baru yang ingin dicoba',
+      reflectionMinChars: '{count}/100 karakter minimum',
+      cancel: 'Batal',
+      send: 'Kirim',
+      writeCheckIn: 'Tulis Check-in',
+    },
+    subscriptionPopup: {
+      title: 'Dapatkan All-Access Package',
+      description:
+        'Tingkatkan pengalaman belajar Anda. Cukup bayar satu kali untuk mendapatkan akses penuh ke seluruh modul di dalam kelas tanpa biaya tambahan.',
+      cta: 'Berlangganan Sekarang',
+    },
+  },
+  editor: {
+    dashboard: {
+      title: 'Dasbor konten & penilaian',
+      summary: (cohorts: number, submissions: number) =>
+        `${cohorts} batch · ${submissions} tugas menunggu dinilai`,
+      yourCohorts: 'Batch Anda',
+      noCohortsYet: 'Belum ada batch. Buat satu untuk mulai menerbitkan konten.',
+      gradingQueue: 'Antrean penilaian',
+      nothingPending: 'Tidak ada yang tertunda. Anda sudah selesai.',
+      yourModules: 'Modul Anda',
+      noModulesYet: 'Anda belum menulis modul apa pun.',
+    },
+    modules: {
+      title: 'Pustaka Konten',
+      subtitle:
+        'Tulis modul, tambahkan pelajaran dan tugas, lalu terbitkan untuk semua Peserta All-Access.',
+      noModules: 'Belum ada modul. Buat satu di atas.',
+      countsSummary: (sessions: number, lessons: number, assignments: number) =>
+        `${sessions} sesi · ${lessons} pelajaran · ${assignments} tugas`,
+      requiresSuffix: (title: string) => ` · membutuhkan "${title}"`,
+      published: 'Diterbitkan',
+      draft: 'Draf',
+      createForm: {
+        heading: 'Modul baru',
+        titleLabel: 'Judul',
+        titlePlaceholder: 'Modul 1: Fondasi & Keamanan AI',
+        descriptionLabel: 'Deskripsi',
+        descriptionPlaceholder: 'Opsional',
+        prerequisiteLabel: 'Membutuhkan modul (opsional)',
+        noPrerequisite: 'Tidak ada — terbuka sejak awal',
+        creating: 'Membuat…',
+        submit: 'Buat Modul',
+      },
+    },
+    moduleDetail: {
+      requiresPrefix: (title: string) =>
+        `Membutuhkan "${title}" untuk diselesaikan terlebih dahulu.`,
+      sessionsHeading: (count: number) => `Sesi (${count})`,
+      noSessions: 'Belum ada sesi.',
+      contentBlocksHeading: (count: number) => `Blok konten (${count})`,
+      noContentBlocks: 'Belum ada blok konten.',
+      assignmentsHeading: (count: number) => `Tugas (${count})`,
+      noAssignments: 'Belum ada tugas.',
+      visibility: 'Visibilitas',
+      visiblePublished: 'Terlihat oleh semua Peserta dengan All-Access.',
+      visibleDraft: 'Draf — hanya Anda yang bisa melihat modul ini.',
+      dueLabel: '· tenggat',
+      advancedMaterialSuffix: ' · bahan modul lanjutan',
+      curriculum: 'Kurikulum',
+      sessionSummary: (lessonCount: number, assignmentCount: number) =>
+        `${lessonCount} pelajaran · ${assignmentCount} tugas`,
+      emptyStateTitle: 'Mulai membangun modul ini',
+      emptyStateDescription:
+        'Tambahkan sesi pertama Anda di sebelah kiri untuk mulai menambahkan pelajaran dan tugas.',
+      addSessionForm: {
+        heading: 'Tambah sesi',
+        titleLabel: 'Judul',
+        titlePlaceholder: 'Sesi 1: ...',
+        adding: 'Menambahkan…',
+        submit: 'Tambah Sesi',
+      },
+      addLessonForm: {
+        heading: 'Tambah blok konten',
+        titleLabel: 'Judul',
+        kindLabel: 'Peran dalam sesi',
+        typeLabel: 'Jenis',
+        contentLabel: 'Konten / URL',
+        adding: 'Menambahkan…',
+        submit: 'Tambah Pelajaran',
+      },
+      addAssignmentForm: {
+        heading: 'Tambah tugas',
+        instructionsLabel: 'Instruksi',
+        submissionTypeLabel: 'Jenis pengumpulan',
+        dueDateLabel: 'Tenggat (opsional)',
+        advancedCheckboxLabel:
+          'Bahan modul lanjutan (dipakai kembali untuk modul otomasi mendatang)',
+        adding: 'Menambahkan…',
+        submit: 'Tambah Tugas',
+      },
+      publishForm: {
+        saving: 'Menyimpan…',
+        unpublish: 'Batalkan Publikasi',
+        publish: 'Terbitkan',
+      },
+    },
+    studio: {
+      statusDraft: 'Draf',
+      statusPublished: 'Terbit',
+      previewCta: 'Pratinjau',
+      tabs: {
+        outline: 'Kerangka',
+        preview: 'Pratinjau peserta',
+        settings: 'Visibilitas & prasyarat',
+      },
+      eyebrow: (published: boolean) =>
+        `MODUL · ${published ? 'TERBIT' : 'DRAF'} · PESERTA ALL-ACCESS`,
+      noDescription: 'Belum ada deskripsi. Tambahkan agar peserta tahu isi modul ini.',
+      itemsSummary: (items: number, sessions: number) => `${items} item · ${sessions} sesi`,
+      noSessions: 'Belum ada sesi. Tambahkan yang pertama untuk mulai membangun modul ini.',
+      noItemsInSession: 'Belum ada blok konten atau tugas di sesi ini.',
+      open: 'Buka',
+      addSession: 'Tambah sesi',
+      itemKind: {
+        reading: 'Bacaan',
+        video: 'Video',
+        file: 'Berkas',
+        assignment: 'Tugas',
+      },
+      itemState: {
+        ready: 'Siap',
+        needsContent: 'Perlu konten',
+        advanced: 'Bahan lanjutan',
+      },
+      dueLabel: 'tenggat',
+      readiness: 'Kesiapan terbit',
+      checks: {
+        description: 'Modul punya deskripsi',
+        descriptionOk: 'Sudah ditulis',
+        descriptionMissing: 'Masih kosong',
+        sessionsHaveContent: 'Setiap sesi punya konten',
+        blocksFilled: 'Setiap blok konten terisi',
+        hasAssignment: 'Modul punya minimal satu tugas',
+        countOf: (done: number, total: number) => `${done} dari ${total}`,
+        none: 'Belum ada',
+        present: 'Tersedia',
+      },
+      contentStats: 'Isi modul',
+      statSessions: 'sesi',
+      statBlocks: 'blok konten',
+      statAssignments: 'tugas',
+      backToOutline: 'Kerangka modul',
+      sessionEyebrow: (order: number) => `SESI ${order}`,
+      contentBlocks: 'Blok konten',
+      assignments: 'Tugas',
+      previewNotice: 'PRATINJAU TAMPILAN PESERTA · TIDAK MEMENGARUHI DATA',
+      previewLocked: 'Peserta melihat modul ini terkunci sampai prasyaratnya selesai.',
+      previewEmpty: 'Belum ada yang bisa dipratinjau — tambahkan sesi berisi konten dulu.',
+      previewProgress: '0% selesai · belum dimulai',
+      previewItemCount: (current: number, total: number) => `ITEM ${current} DARI ${total}`,
+      previewMarkDone: 'Tandai selesai',
+      previewNext: 'Item berikutnya',
+      settingsTitle: 'Visibilitas & prasyarat',
+      settingsSubtitle:
+        'Mengatur siapa yang bisa melihat modul ini dan apa yang harus diselesaikan peserta sebelum modul terbuka.',
+      visibilityLabel: 'Visibilitas',
+      visibilityNote: 'Modul yang terbit terlihat oleh semua Peserta dengan All-Access.',
+      prerequisiteLabel: 'Prasyarat',
+      prerequisiteNote:
+        'Modul yang harus diselesaikan peserta hingga 100% sebelum modul ini terbuka.',
+      prerequisiteNone: 'Tidak ada — terbuka sejak awal',
+      prerequisiteSaving: 'Menyimpan…',
+      prerequisiteSubmit: 'Simpan prasyarat',
+      noOtherModules: 'Belum ada modul lain yang bisa dijadikan prasyarat.',
+    },
+    cohorts: {
+      title: 'Batch',
+      subtitle:
+        'Buat batch untuk menjadwalkan sesi tatap muka dan daftar pesertanya. Akses konten berasal dari paket All-Access, bukan dari keanggotaan batch.',
+      noCohorts: 'Belum ada batch. Buat satu di atas.',
+      onsitePrefix: 'Tatap muka',
+      studentsCountSuffix: (count: number) => `${count} peserta`,
+      createForm: {
+        heading: 'Batch baru',
+        nameLabel: 'Nama',
+        namePlaceholder: 'Tatap Muka AI Q1',
+        dateLabel: 'Tanggal tatap muka',
+        creating: 'Membuat…',
+        submit: 'Buat Batch',
+      },
+      detail: {
+        studentsHeading: (count: number) => `Peserta (${count})`,
+        noStudents: 'Belum ada peserta yang terdaftar.',
+        allAccess: 'All-Access',
+        noAccess: 'Belum Akses',
+        remove: 'Hapus',
+        addMemberForm: {
+          emailLabel: 'Email peserta',
+          emailPlaceholder: 'peserta@contoh.com',
+          adding: 'Menambahkan…',
+          submit: 'Tambah',
+        },
+      },
+    },
+    grading: {
+      title: 'Antrean Penilaian',
+      subtitleCount: (count: number) => `${count} tugas menunggu dinilai dari seluruh modul Anda.`,
+      nothingPending: 'Tidak ada yang tertunda. Anda sudah selesai.',
+      advancedMaterialSuffix: ' · bahan modul lanjutan',
+      form: {
+        scorePlaceholder: 'Nilai',
+        noPassFail: 'Tanpa lulus/tidak lulus',
+        pass: 'Lulus',
+        fail: 'Tidak Lulus',
+        feedbackPlaceholder: 'Umpan balik (opsional)',
+        grading: 'Menilai…',
+        submit: 'Nilai',
+      },
+    },
+    resources: {
+      title: 'Pustaka Sumber Daya',
+      subtitle: 'Tips, template, dan panduan, terlihat oleh semua peserta di platform.',
+      nothingPublished: 'Belum ada yang diterbitkan.',
+      createForm: {
+        heading: 'Sumber daya baru',
+        typeLabel: 'Jenis',
+        titleLabel: 'Judul',
+        contentLabel: 'Konten',
+        tagsLabel: 'Tag (pisahkan dengan koma)',
+        tagsPlaceholder: 'prompting, dasar',
+        publishing: 'Menerbitkan…',
+        submit: 'Terbitkan Sumber Daya',
+      },
+    },
+  },
+};
+
+export const dictionaries: Record<Locale, Dictionary> = { en, id };

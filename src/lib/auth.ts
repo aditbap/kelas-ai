@@ -7,11 +7,12 @@ import { prisma } from '@/lib/db';
 import { sendEmail } from '@/lib/email';
 
 /**
- * Accounts on this platform are never publicly self-registered — every User is
- * created server-side by a provisioning flow (checkout, employee invite, instructor
- * onboarding) that assigns `role`/`tenantId` deliberately. Sign-up is disabled so the
- * only way in is: an admin/system creates the User, then the person sets their own
- * password via the reset-password ("accept invite") link.
+ * Self-serve sign-up is enabled - anyone can create a Student account. Editor
+ * accounts are never self-registered (there's no admin/invite layer left to
+ * grant that role); they're created directly in the database (see
+ * `prisma/seed.ts`). `role` is `input: false` so a signup request can't set
+ * it, and the `databaseHooks.user.create.before` hook below forces it to
+ * `Student` server-side as a second, defense-in-depth guarantee.
  */
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: 'postgresql' }),
@@ -19,26 +20,36 @@ export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL,
   emailAndPassword: {
     enabled: true,
-    disableSignUp: true,
     sendResetPassword: async ({ user, url }) => {
-      await sendEmail({
-        to: user.email,
-        subject: 'Set your Kelas AI password',
-        html: `<p>Click the link below to set your password and access your workspace.</p><p><a href="${url}">${url}</a></p>`,
-      });
+      // Never let an email-provider hiccup surface as a 500 on the
+      // reset-password flow - the client already shows a generic "check your
+      // email" message regardless of whether the address exists, so a send
+      // failure here should fail the same way, not blow up the request.
+      try {
+        await sendEmail({
+          to: user.email,
+          subject: 'Reset your Kelas AI password',
+          html: `<p>Click the link below to reset your password.</p><p><a href="${url}">${url}</a></p>`,
+        });
+      } catch (error) {
+        console.error(`Failed to send reset-password email to ${user.email}:`, error);
+      }
     },
   },
   user: {
     additionalFields: {
       role: {
-        type: [Role.Employee, Role.CompanyAdmin, Role.Instructor, Role.SuperAdmin],
-        required: true,
-        input: false,
-      },
-      tenantId: {
-        type: 'string',
+        type: [Role.Student, Role.Editor],
         required: false,
         input: false,
+        defaultValue: Role.Student,
+      },
+    },
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => ({ data: { ...user, role: Role.Student } }),
       },
     },
   },

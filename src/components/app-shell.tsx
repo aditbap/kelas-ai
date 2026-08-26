@@ -1,77 +1,84 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
-import { SignOutButton } from '@/components/sign-out-button';
+import { LanguageToggle } from '@/components/language-toggle';
+import { Sidebar } from '@/components/sidebar';
+import { SidebarProvider } from '@/components/sidebar-context';
+import { SidebarToggle } from '@/components/sidebar-toggle';
+import { getTranslations } from '@/lib/i18n/get-locale';
+import type { AppRole } from '@/lib/roles';
 import type { AppSession } from '@/lib/session';
-import { cn } from '@/lib/utils';
 
-export type NavItem = {
-  label: string;
-  href?: string;
-  enabled?: boolean;
-};
+import { ThemeToggle } from '@/components/theme-toggle';
 
-export function AppShell({
+/*
+  Same design language as the marketing site, expressed at a denser volume:
+  the black global bar carries over for brand continuity, then a parchment
+  sidebar and a canvas work area. The tile rhythm deliberately does not apply
+  here, since alternating full-bleed bands do not suit dense product UI.
+
+  The sidebar minimizes on both breakpoints: an off-canvas drawer on mobile
+  (hidden by default, opened with the header hamburger) and a collapsible
+  icon rail on desktop. State lives in SidebarProvider so the header toggle
+  and the drawer itself can share it without prop drilling.
+*/
+export async function AppShell({
   session,
-  roleLabel,
-  navItems,
+  role,
+  hasAllAccess,
   children,
 }: {
   session: AppSession;
-  roleLabel: string;
-  navItems: NavItem[];
+  role: AppRole;
+  /** Student-only: whether they've bought the All-Access package. Omitted for editors. */
+  hasAllAccess?: boolean;
   children: ReactNode;
 }) {
+  const { t } = await getTranslations();
+
   return (
-    <div className="flex min-h-screen flex-col md:flex-row">
-      <aside className="flex shrink-0 flex-col gap-4 border-b border-sidebar-border bg-sidebar p-4 text-sidebar-foreground md:w-64 md:border-r md:border-b-0">
-        <div>
-          <p className="text-sm font-semibold tracking-tight">Kelas AI</p>
-          <p className="text-xs text-muted-foreground">{roleLabel}</p>
-        </div>
-
-        <nav
-          aria-label="Primary"
-          className="flex gap-1 overflow-x-auto md:flex-col md:overflow-visible"
-        >
-          {navItems.map((item) => {
-            const isLink = item.enabled !== false && item.href;
-            const itemClassName = cn(
-              'shrink-0 rounded-md px-3 py-2 text-sm font-medium whitespace-nowrap',
-              isLink
-                ? 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
-                : 'text-muted-foreground',
-            );
-
-            if (isLink) {
-              return (
-                <Link key={item.label} href={item.href!} className={itemClassName}>
-                  {item.label}
-                </Link>
-              );
-            }
-
-            return (
-              <span key={item.label} className={cn(itemClassName, 'flex items-center gap-2')}>
-                {item.label}
-                <span className="rounded-full border border-sidebar-border px-1.5 py-0.5 text-[0.65rem] font-normal text-muted-foreground">
-                  Soon
-                </span>
-              </span>
-            );
-          })}
-        </nav>
-
-        <div className="mt-auto space-y-2 border-t border-sidebar-border pt-4">
-          <div className="text-xs">
-            <p className="font-medium">{session.name}</p>
-            <p className="text-muted-foreground">{session.email}</p>
+    <SidebarProvider>
+      <div className="flex min-h-[100dvh] flex-col">
+        <header className="sticky top-0 z-40 bg-canvas border-b border-hairline text-ink">
+          <div className="flex h-12 items-center gap-2.5 px-4 md:px-6">
+            <SidebarToggle />
+            <div className="flex flex-1 items-baseline gap-2.5">
+              <Link href="/" className="text-caption font-semibold tracking-tight text-ink">
+                Kelas AI
+              </Link>
+              <span className="text-fine text-ink-muted">{t.common.roleLabel[role]}</span>
+            </div>
+            <div className="flex items-center gap-4">
+              {hasAllAccess !== undefined ? (
+                hasAllAccess ? (
+                  <Link
+                    href="/student/checkout"
+                    className="shrink-0 rounded-full bg-action/10 px-2.5 py-0.5 text-fine font-medium text-action transition-colors hover:bg-action/20"
+                  >
+                    {t.app.allAccessBadge}
+                  </Link>
+                ) : (
+                  <Link
+                    href="/student/checkout"
+                    className="shrink-0 rounded-full border border-hairline px-2.5 py-0.5 text-fine font-medium text-ink-muted transition-colors hover:text-ink"
+                  >
+                    {t.app.noAccessUpgrade}
+                  </Link>
+                )
+              ) : null}
+              <LanguageToggle className="text-fine text-ink-muted" />
+              <ThemeToggle />
+              <p className="truncate text-fine text-ink-muted">{session.email}</p>
+            </div>
           </div>
-          <SignOutButton />
-        </div>
-      </aside>
+        </header>
 
-      <main className="flex-1 p-6 md:p-10">{children}</main>
-    </div>
+        <div className="flex flex-1 md:flex-row">
+          <Sidebar role={role} session={session} hasAllAccess={hasAllAccess} />
+
+          <main className="min-w-0 flex-1 bg-canvas p-6 md:p-10">{children}</main>
+        </div>
+      </div>
+    </SidebarProvider>
   );
 }

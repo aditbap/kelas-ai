@@ -1,22 +1,29 @@
 import type { Metadata } from 'next';
 
+import { Reveal } from '@/components/reveal';
+import { Tile } from '@/components/tile';
+import { getTranslations } from '@/lib/i18n/get-locale';
+
 import { ConsultationForm } from './consultation-form';
 
 export const metadata: Metadata = {
-  title: 'Book a Consultation — Kelas AI',
+  title: 'Book a Consultation: Kelas AI',
 };
 
-export default function ConsultationPage() {
+export default async function ConsultationPage() {
+  const { t } = await getTranslations();
+
   return (
-    <section className="mx-auto max-w-md px-6 py-24">
-      <h1 className="text-center text-3xl font-bold tracking-tight">Book a Consultation</h1>
-      <p className="mt-3 text-center text-sm text-muted-foreground">
-        For larger seat counts, custom curriculum, or multi-site rollouts — tell us about your team
-        and we&apos;ll follow up.
-      </p>
-      <div className="mt-10">
-        <ConsultationForm />
-      </div>
-    </section>
+    <Tile surface="canvas" innerClassName="max-w-md">
+      <Reveal>
+        <h1 className="text-center text-display-md text-ink md:text-display-lg">
+          {t.consultation.title}
+        </h1>
+        <p className="mt-4 text-center text-caption text-ink-muted">{t.consultation.description}</p>
+        <div className="mt-10">
+          <ConsultationForm t={t.consultation.form} />
+        </div>
+      </Reveal>
+    </Tile>
   );
 }

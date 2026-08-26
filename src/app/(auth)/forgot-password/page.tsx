@@ -7,8 +7,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { authClient } from '@/lib/auth-client';
+import { useLocale } from '@/lib/i18n/locale-context';
 
 export default function ForgotPasswordPage() {
+  const { t } = useLocale();
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,7 +27,7 @@ export default function ForgotPasswordPage() {
       });
 
       if (requestError) {
-        setError(requestError.message ?? 'Something went wrong. Please try again.');
+        setError(requestError.message ?? t.auth.genericError);
         return;
       }
 
@@ -34,17 +36,21 @@ export default function ForgotPasswordPage() {
   }
 
   if (submitted) {
+    const [before, after] = t.auth.forgotPassword.checkEmailDescription.split('{email}');
+
     return (
       <div>
-        <h1 className="text-lg font-semibold tracking-tight">Check your email</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          If an account exists for <strong>{email}</strong>, we sent a link to set a new password.
+        <h1 className="text-tagline">{t.auth.forgotPassword.checkEmailTitle}</h1>
+        <p className="mt-2 text-caption text-ink-muted">
+          {before}
+          <strong>{email}</strong>
+          {after}
         </p>
         <Link
           href="/login"
-          className="mt-6 inline-block text-sm text-foreground underline underline-offset-4"
+          className="mt-6 inline-block text-caption text-ink underline underline-offset-4"
         >
-          Back to sign in
+          {t.auth.forgotPassword.backToSignIn}
         </Link>
       </div>
     );
@@ -52,14 +58,12 @@ export default function ForgotPasswordPage() {
 
   return (
     <div>
-      <h1 className="text-lg font-semibold tracking-tight">Reset your password</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Enter your email and we&apos;ll send you a link to set a new password.
-      </p>
+      <h1 className="text-tagline">{t.auth.forgotPassword.title}</h1>
+      <p className="mt-1 text-caption text-ink-muted">{t.auth.forgotPassword.subtitle}</p>
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
         <div className="space-y-1.5">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t.auth.forgotPassword.email}</Label>
           <Input
             id="email"
             name="email"
@@ -72,20 +76,20 @@ export default function ForgotPasswordPage() {
         </div>
 
         {error ? (
-          <p role="alert" className="text-sm text-destructive">
+          <p role="alert" className="text-caption text-destructive">
             {error}
           </p>
         ) : null}
 
         <Button type="submit" className="w-full justify-center" disabled={isPending}>
-          {isPending ? 'Sending…' : 'Send reset link'}
+          {isPending ? t.auth.forgotPassword.submitPending : t.auth.forgotPassword.submit}
         </Button>
 
         <Link
           href="/login"
-          className="block text-center text-sm text-muted-foreground hover:text-foreground"
+          className="block text-center text-caption text-ink-muted hover:text-ink"
         >
-          Back to sign in
+          {t.auth.forgotPassword.backToSignIn}
         </Link>
       </form>
     </div>

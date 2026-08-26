@@ -8,12 +8,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { authClient } from '@/lib/auth-client';
+import { useLocale } from '@/lib/i18n/locale-context';
 
 const MIN_PASSWORD_LENGTH = 8;
 
 export function ResetPasswordForm() {
   const router = useRouter();
   const token = useSearchParams().get('token');
+  const { t } = useLocale();
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -23,15 +25,15 @@ export function ResetPasswordForm() {
   if (!token) {
     return (
       <div>
-        <h1 className="text-lg font-semibold tracking-tight">Link expired or invalid</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          This set-password link is missing or no longer valid. Request a new one to continue.
+        <h1 className="text-tagline">{t.auth.resetPassword.linkInvalidTitle}</h1>
+        <p className="mt-2 text-caption text-ink-muted">
+          {t.auth.resetPassword.linkInvalidDescription}
         </p>
         <Link
           href="/forgot-password"
-          className="mt-6 inline-block text-sm text-foreground underline underline-offset-4"
+          className="mt-6 inline-block text-caption text-ink underline underline-offset-4"
         >
-          Request a new link
+          {t.auth.resetPassword.requestNewLink}
         </Link>
       </div>
     );
@@ -42,11 +44,11 @@ export function ResetPasswordForm() {
     setError(null);
 
     if (password.length < MIN_PASSWORD_LENGTH) {
-      setError(`Password must be at least ${MIN_PASSWORD_LENGTH} characters.`);
+      setError(t.auth.resetPassword.passwordTooShort.replace('{min}', String(MIN_PASSWORD_LENGTH)));
       return;
     }
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError(t.auth.resetPassword.passwordMismatch);
       return;
     }
 
@@ -57,7 +59,7 @@ export function ResetPasswordForm() {
       });
 
       if (resetError) {
-        setError(resetError.message ?? 'Something went wrong. Please try again.');
+        setError(resetError.message ?? t.auth.genericError);
         return;
       }
 
@@ -67,12 +69,12 @@ export function ResetPasswordForm() {
 
   return (
     <div>
-      <h1 className="text-lg font-semibold tracking-tight">Set your password</h1>
-      <p className="mt-1 text-sm text-muted-foreground">Choose a password for your account.</p>
+      <h1 className="text-tagline">{t.auth.resetPassword.title}</h1>
+      <p className="mt-1 text-caption text-ink-muted">{t.auth.resetPassword.subtitle}</p>
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
         <div className="space-y-1.5">
-          <Label htmlFor="password">New password</Label>
+          <Label htmlFor="password">{t.auth.resetPassword.newPassword}</Label>
           <Input
             id="password"
             name="password"
@@ -86,7 +88,7 @@ export function ResetPasswordForm() {
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="confirmPassword">Confirm password</Label>
+          <Label htmlFor="confirmPassword">{t.auth.resetPassword.confirmPassword}</Label>
           <Input
             id="confirmPassword"
             name="confirmPassword"
@@ -100,13 +102,13 @@ export function ResetPasswordForm() {
         </div>
 
         {error ? (
-          <p role="alert" className="text-sm text-destructive">
+          <p role="alert" className="text-caption text-destructive">
             {error}
           </p>
         ) : null}
 
         <Button type="submit" className="w-full justify-center" disabled={isPending}>
-          {isPending ? 'Saving…' : 'Set password'}
+          {isPending ? t.auth.resetPassword.submitPending : t.auth.resetPassword.submit}
         </Button>
       </form>
     </div>
