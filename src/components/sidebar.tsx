@@ -60,7 +60,7 @@ export function Sidebar({
 
       <aside
         className={cn(
-          'fixed top-12 bottom-0 left-0 z-40 flex w-72 shrink-0 -translate-x-full flex-col gap-5 border-r border-hairline bg-parchment p-4 transition-transform duration-200 ease-out',
+          'fixed top-12 bottom-0 left-0 z-40 flex w-72 shrink-0 -translate-x-full flex-col gap-5 overflow-y-auto border-r border-hairline bg-parchment p-4 transition-transform duration-200 ease-out',
           'md:sticky md:top-12 md:h-[calc(100dvh-3rem)] md:w-64 md:translate-x-0',
           isMobileOpen && 'translate-x-0',
           isCollapsed && 'md:w-[68px] md:items-center md:px-2.5',

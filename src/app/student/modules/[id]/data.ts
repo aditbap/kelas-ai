@@ -38,7 +38,12 @@ export type PlayerItem =
     };
 
 export type ModulePlayerData = {
-  module: { id: string; title: string; description: string | null };
+  module: {
+    id: string;
+    title: string;
+    description: string | null;
+    prerequisiteTitle: string | null;
+  };
   overallPercent: number;
   sessions: { id: string; order: number; title: string }[];
   items: PlayerItem[];
@@ -129,7 +134,12 @@ export async function loadModulePlayerData(moduleId: string): Promise<ModulePlay
   return {
     status: 'ok',
     data: {
-      module: { id: module_.id, title: module_.title, description: module_.description },
+      module: {
+        id: module_.id,
+        title: module_.title,
+        description: module_.description,
+        prerequisiteTitle: module_.prerequisite?.title ?? null,
+      },
       overallPercent,
       sessions: module_.sessions.map((moduleSession) => ({
         id: moduleSession.id,

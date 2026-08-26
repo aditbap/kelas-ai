@@ -5,9 +5,9 @@ import { Button } from '@/components/ui/button';
 import { getTranslations } from '@/lib/i18n/get-locale';
 
 import { completeLessonAndAdvanceAction } from '../../actions';
-import { CourseOutline } from '../course-outline';
 import { loadModulePlayerData } from '../data';
 import { SubmitAssignmentForm } from '../submit-assignment-form';
+import { SyncCourseOutline } from '../sync-course-outline';
 
 export default async function ModuleItemPage({
   params,
@@ -61,18 +61,18 @@ export default async function ModuleItemPage({
   const nextLabel = nextItem ? d.goToNextItem : d.backToModules;
 
   return (
-    <div className="lg:grid lg:grid-cols-[320px_1fr] lg:items-start lg:gap-8">
-      <CourseOutline
+    <div className="min-w-0">
+      <SyncCourseOutline
         moduleId={id}
         moduleTitle={data.module.title}
         overallPercent={data.overallPercent}
+        overallProgressLabel={d.overallProgress}
         sessions={data.sessions}
         items={data.items}
         currentItemId={itemId}
-        t={d}
       />
 
-      <main className="mt-8 min-w-0 lg:mt-0">
+      <main className="min-w-0">
         <div className="rounded-lg border border-hairline p-6">
           <p className="text-fine font-semibold tracking-wide text-ink-muted uppercase">
             {current.type === 'assignment'

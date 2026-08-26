@@ -3,12 +3,26 @@
 import { usePathname } from 'next/navigation';
 import { createContext, useContext, useState, type ReactNode } from 'react';
 
+import type { PlayerItem } from '@/app/student/modules/[id]/data';
+
+export type CourseOutlineData = {
+  moduleId: string;
+  moduleTitle: string;
+  overallPercent: number;
+  overallProgressLabel: string;
+  sessions: { id: string; order: number; title: string }[];
+  items: PlayerItem[];
+  currentItemId: string;
+};
+
 type SidebarContextValue = {
   isMobileOpen: boolean;
   openMobile: () => void;
   closeMobile: () => void;
   isCollapsed: boolean;
   toggleCollapsed: () => void;
+  courseOutline: CourseOutlineData | null;
+  setCourseOutline: (data: CourseOutlineData | null) => void;
 };
 
 const SidebarContext = createContext<SidebarContextValue | null>(null);
@@ -16,6 +30,7 @@ const SidebarContext = createContext<SidebarContextValue | null>(null);
 export function SidebarProvider({ children }: { children: ReactNode }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [courseOutline, setCourseOutline] = useState<CourseOutlineData | null>(null);
   const pathname = usePathname();
   const [trackedPathname, setTrackedPathname] = useState(pathname);
 
@@ -35,6 +50,8 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
         closeMobile: () => setIsMobileOpen(false),
         isCollapsed,
         toggleCollapsed: () => setIsCollapsed((prev) => !prev),
+        courseOutline,
+        setCourseOutline,
       }}
     >
       {children}
