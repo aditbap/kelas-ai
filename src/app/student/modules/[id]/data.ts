@@ -43,6 +43,7 @@ export type ModulePlayerData = {
     title: string;
     description: string | null;
     prerequisiteTitle: string | null;
+    createdByName: string;
   };
   overallPercent: number;
   sessions: { id: string; order: number; title: string }[];
@@ -68,6 +69,7 @@ export async function loadModulePlayerData(moduleId: string): Promise<ModulePlay
     where: { id: moduleId, isPublished: true },
     include: {
       prerequisite: true,
+      createdBy: { select: { name: true } },
       sessions: {
         orderBy: { order: 'asc' },
         include: {
@@ -139,6 +141,7 @@ export async function loadModulePlayerData(moduleId: string): Promise<ModulePlay
         title: module_.title,
         description: module_.description,
         prerequisiteTitle: module_.prerequisite?.title ?? null,
+        createdByName: module_.createdBy.name,
       },
       overallPercent,
       sessions: module_.sessions.map((moduleSession) => ({
