@@ -8,40 +8,39 @@ import {
 } from '@phosphor-icons/react/dist/ssr';
 import Link from 'next/link';
 
-import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { cn } from '@/lib/utils';
 
 import type { PlayerItem } from './data';
 
 const CONTENT_ICON = { Text: Article, Video: PlayCircle, File: FileArrowDown };
 
-export function CourseOutline({
+export function CourseOutlinePanel({
   moduleId,
   moduleTitle,
   overallPercent,
+  overallProgressLabel,
   sessions,
   items,
   currentItemId,
-  t,
 }: {
   moduleId: string;
   moduleTitle: string;
   overallPercent: number;
+  overallProgressLabel: string;
   sessions: { id: string; order: number; title: string }[];
   items: PlayerItem[];
   currentItemId: string;
-  t: Dictionary['student']['moduleDetail'];
 }) {
   return (
-    <aside className="lg:sticky lg:top-6">
-      <h1 className="text-tagline font-semibold text-ink">{moduleTitle}</h1>
+    <div>
+      <h1 className="text-caption font-semibold text-ink">{moduleTitle}</h1>
       <div className="mt-3 flex items-center gap-3">
         <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted/50">
           <div className="h-full rounded-full bg-action" style={{ width: `${overallPercent}%` }} />
         </div>
         <span className="shrink-0 text-fine font-medium text-ink-muted">{overallPercent}%</span>
       </div>
-      <p className="mt-1 text-fine text-ink-muted">{t.overallProgress}</p>
+      <p className="mt-1 text-fine text-ink-muted">{overallProgressLabel}</p>
 
       <div className="mt-4 divide-y divide-hairline rounded-lg border border-hairline">
         {sessions.map((sessionEntry) => {
@@ -97,6 +96,6 @@ export function CourseOutline({
           );
         })}
       </div>
-    </aside>
+    </div>
   );
 }
