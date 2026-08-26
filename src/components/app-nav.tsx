@@ -12,6 +12,7 @@ import {
   Info,
   Lightbulb,
   LockKeyOpen,
+  Trophy,
   UsersThree,
 } from '@phosphor-icons/react';
 import Link from 'next/link';
@@ -50,7 +51,7 @@ const studentNav: {
   { href: '/student', labelKey: 'dashboard', icon: House },
   { href: '/student/modules', labelKey: 'learningModules', icon: BookOpen },
   { href: '/student/assignments', labelKey: 'assignments', icon: ClipboardText },
-  { href: '/student/progress', labelKey: 'myProgress', icon: ChartLine },
+  { href: '/student/progress', labelKey: 'myProgress', icon: Trophy },
   { href: '/student/resources', labelKey: 'resourceLibrary', icon: Lightbulb },
   { href: '/student/checkout', labelKey: 'getAllAccess', icon: LockKeyOpen },
 ];

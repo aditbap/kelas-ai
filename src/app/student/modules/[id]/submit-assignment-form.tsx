@@ -30,6 +30,7 @@ export function SubmitAssignmentForm({
       <input type="hidden" name="assignmentId" value={assignmentId} />
       {isText ? (
         <Textarea
+          key={assignmentId}
           name="content"
           defaultValue={existingContent ?? ''}
           placeholder={s.yourAnswer}
@@ -37,6 +38,7 @@ export function SubmitAssignmentForm({
         />
       ) : (
         <Input
+          key={assignmentId}
           name="content"
           defaultValue={existingContent ?? ''}
           placeholder={s.urlPlaceholder.replace('{type}', submissionType)}

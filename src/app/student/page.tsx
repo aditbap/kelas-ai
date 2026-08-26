@@ -107,7 +107,11 @@ export default async function StudentDashboardPage() {
 
                       <div className="mt-4 flex justify-end">
                         {percent === 100 ? (
-                          <Button size="sm" variant="outline">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            render={<Link href={`/student/modules/${module.id}/certificate`} />}
+                          >
                             {s.printCertificate}
                           </Button>
                         ) : (

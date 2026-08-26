@@ -39,7 +39,7 @@ export async function AppShell({
   return (
     <SidebarProvider>
       <div className="flex min-h-[100dvh] flex-col">
-        <header className="sticky top-0 z-40 bg-canvas border-b border-hairline text-ink">
+        <header className="sticky top-0 z-40 bg-canvas border-b border-hairline text-ink print:hidden">
           <div className="flex h-12 items-center gap-2.5 px-4 md:px-6">
             <SidebarToggle />
             <div className="flex flex-1 items-baseline gap-2.5">
@@ -76,7 +76,7 @@ export async function AppShell({
         <div className="flex flex-1 md:flex-row">
           <Sidebar role={role} session={session} hasAllAccess={hasAllAccess} />
 
-          <main className="min-w-0 flex-1 bg-canvas p-6 md:p-10">{children}</main>
+          <main className="min-w-0 flex-1 bg-canvas p-6 md:p-10 print:p-0">{children}</main>
         </div>
       </div>
     </SidebarProvider>
