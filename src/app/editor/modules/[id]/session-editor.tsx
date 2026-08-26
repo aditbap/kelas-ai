@@ -46,71 +46,73 @@ export function SessionEditor({
         </p>
         <h1 className="mb-10 text-display-md text-ink text-pretty">{session.title}</h1>
 
-        <section>
-          <h2 className="text-caption font-semibold text-ink-muted">
-            {moduleDetailT.contentBlocksHeading(session.lessons.length)}
-          </h2>
-          <ul className="mt-2 divide-y divide-hairline rounded-md border border-hairline">
-            {session.lessons.length === 0 ? (
-              <li className="px-4 py-3 text-caption text-ink-muted">
-                {moduleDetailT.noContentBlocks}
-              </li>
-            ) : (
-              session.lessons.map((lesson, index) => (
-                <li key={lesson.id} className="px-4 py-3">
-                  <p className="text-caption font-medium text-ink">
-                    {index + 1}. {lesson.title}
-                  </p>
-                  <p className="mt-0.5 text-fine text-ink-muted">
-                    {lessonKindLabel[lesson.kind as keyof typeof lessonKindLabel] ?? lesson.kind} ·{' '}
-                    {lesson.contentType}
-                  </p>
-                  {lesson.content?.trim() ? (
-                    <p className="mt-1 text-fine text-ink-muted line-clamp-2">{lesson.content}</p>
-                  ) : (
-                    <p className="mt-1 text-fine text-action">{t.itemState.needsContent}</p>
-                  )}
+        <div className="flex flex-wrap gap-x-10 gap-y-10">
+          <section className="min-w-0 flex-[1_1_320px]">
+            <h2 className="text-caption font-semibold text-ink-muted">
+              {moduleDetailT.contentBlocksHeading(session.lessons.length)}
+            </h2>
+            <ul className="mt-2 divide-y divide-hairline rounded-md border border-hairline">
+              {session.lessons.length === 0 ? (
+                <li className="px-4 py-3 text-caption text-ink-muted">
+                  {moduleDetailT.noContentBlocks}
                 </li>
-              ))
-            )}
-          </ul>
-          <div className="mt-3 max-w-sm">
-            <AddLessonForm
-              sessionId={session.id}
-              t={moduleDetailT.addLessonForm}
-              lessonKindLabel={lessonKindLabel}
-            />
-          </div>
-        </section>
+              ) : (
+                session.lessons.map((lesson, index) => (
+                  <li key={lesson.id} className="px-4 py-3">
+                    <p className="text-caption font-medium text-ink">
+                      {index + 1}. {lesson.title}
+                    </p>
+                    <p className="mt-0.5 text-fine text-ink-muted">
+                      {lessonKindLabel[lesson.kind as keyof typeof lessonKindLabel] ?? lesson.kind}{' '}
+                      · {lesson.contentType}
+                    </p>
+                    {lesson.content?.trim() ? (
+                      <p className="mt-1 text-fine text-ink-muted line-clamp-2">{lesson.content}</p>
+                    ) : (
+                      <p className="mt-1 text-fine text-action">{t.itemState.needsContent}</p>
+                    )}
+                  </li>
+                ))
+              )}
+            </ul>
+            <div className="mt-3">
+              <AddLessonForm
+                sessionId={session.id}
+                t={moduleDetailT.addLessonForm}
+                lessonKindLabel={lessonKindLabel}
+              />
+            </div>
+          </section>
 
-        <section className="mt-10">
-          <h2 className="text-caption font-semibold text-ink-muted">
-            {moduleDetailT.assignmentsHeading(session.assignments.length)}
-          </h2>
-          <ul className="mt-2 divide-y divide-hairline rounded-md border border-hairline">
-            {session.assignments.length === 0 ? (
-              <li className="px-4 py-3 text-caption text-ink-muted">
-                {moduleDetailT.noAssignments}
-              </li>
-            ) : (
-              session.assignments.map((assignment) => (
-                <li key={assignment.id} className="px-4 py-3">
-                  <p className="text-caption font-medium text-ink">{assignment.instructions}</p>
-                  <p className="mt-0.5 text-fine text-ink-muted">
-                    {assignment.submissionType}
-                    {assignment.dueDate
-                      ? ` ${moduleDetailT.dueLabel} ${assignment.dueDate.toLocaleDateString()}`
-                      : ''}
-                    {assignment.isAdvancedMaterial ? moduleDetailT.advancedMaterialSuffix : ''}
-                  </p>
+          <section className="min-w-0 flex-[1_1_320px]">
+            <h2 className="text-caption font-semibold text-ink-muted">
+              {moduleDetailT.assignmentsHeading(session.assignments.length)}
+            </h2>
+            <ul className="mt-2 divide-y divide-hairline rounded-md border border-hairline">
+              {session.assignments.length === 0 ? (
+                <li className="px-4 py-3 text-caption text-ink-muted">
+                  {moduleDetailT.noAssignments}
                 </li>
-              ))
-            )}
-          </ul>
-          <div className="mt-3 max-w-sm">
-            <AddAssignmentForm sessionId={session.id} t={moduleDetailT.addAssignmentForm} />
-          </div>
-        </section>
+              ) : (
+                session.assignments.map((assignment) => (
+                  <li key={assignment.id} className="px-4 py-3">
+                    <p className="text-caption font-medium text-ink">{assignment.instructions}</p>
+                    <p className="mt-0.5 text-fine text-ink-muted">
+                      {assignment.submissionType}
+                      {assignment.dueDate
+                        ? ` ${moduleDetailT.dueLabel} ${assignment.dueDate.toLocaleDateString()}`
+                        : ''}
+                      {assignment.isAdvancedMaterial ? moduleDetailT.advancedMaterialSuffix : ''}
+                    </p>
+                  </li>
+                ))
+              )}
+            </ul>
+            <div className="mt-3">
+              <AddAssignmentForm sessionId={session.id} t={moduleDetailT.addAssignmentForm} />
+            </div>
+          </section>
+        </div>
       </div>
 
       <aside className="w-full flex-[0_1_320px] rounded-lg border border-hairline bg-pearl p-6 lg:w-auto">

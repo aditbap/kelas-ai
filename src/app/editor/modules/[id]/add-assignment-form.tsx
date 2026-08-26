@@ -41,14 +41,16 @@ export function AddAssignmentForm({
             <option value="File">File (URL)</option>
           </select>
         </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="dueDate">{t.dueDateLabel}</Label>
-          <Input id="dueDate" name="dueDate" type="date" />
+        <div className="flex items-end gap-3">
+          <div className="flex-1 space-y-1.5">
+            <Label htmlFor="dueDate">{t.dueDateLabel}</Label>
+            <Input id="dueDate" name="dueDate" type="date" />
+          </div>
+          <label className="flex items-center gap-2 pb-2 text-caption text-ink-muted">
+            <input type="checkbox" name="isAdvancedMaterial" className="size-3.5" />
+            {t.advancedCheckboxLabel}
+          </label>
         </div>
-        <label className="flex items-center gap-2 text-caption text-ink-muted">
-          <input type="checkbox" name="isAdvancedMaterial" className="size-3.5" />
-          {t.advancedCheckboxLabel}
-        </label>
         {state.error ? <p className="text-fine text-destructive">{state.error}</p> : null}
         {state.success ? <p className="text-fine text-action">{state.success}</p> : null}
         <Button type="submit" size="sm" className="w-full justify-center" disabled={isPending}>

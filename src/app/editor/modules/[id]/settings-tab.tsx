@@ -1,14 +1,14 @@
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { cn } from '@/lib/utils';
 
+import { DeleteModuleForm } from './delete-module-form';
 import { PrerequisiteForm } from './prerequisite-form';
 import { PublishForm } from './publish-form';
 
 /*
   The design's settings screen: a stack of hairline-separated rows, each
-  pairing a label column with its control. Only the two settings this module
-  actually has are shown — visibility and prerequisite — rather than
-  scaffolding rows for fields the schema does not carry.
+  pairing a label column with its control — visibility, prerequisite, and
+  danger-zone deletion.
 */
 export function SettingsTab({
   moduleId,
@@ -39,6 +39,20 @@ export function SettingsTab({
           moduleId={moduleId}
           currentPrerequisiteId={prerequisiteModuleId}
           otherModules={otherModules}
+        />
+      ),
+    },
+    {
+      label: t.dangerZoneLabel,
+      note: t.dangerZoneNote,
+      control: (
+        <DeleteModuleForm
+          moduleId={moduleId}
+          t={{
+            deleteConfirm: t.deleteConfirm,
+            deleteSubmit: t.deleteSubmit,
+            deleting: t.deleting,
+          }}
         />
       ),
     },

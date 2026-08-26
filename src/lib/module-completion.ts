@@ -33,6 +33,17 @@ export async function getModuleCompletionPercent(
   return average(percents);
 }
 
+/** A failing grade on any assignment in the module blocks its certificate, even at 100% completion. */
+export async function hasFailedGradeInModule(userId: string, moduleId: string): Promise<boolean> {
+  const failedGrade = await prisma.grade.findFirst({
+    where: {
+      passFail: false,
+      submission: { userId, assignment: { session: { moduleId } } },
+    },
+  });
+  return failedGrade !== null;
+}
+
 export async function isModuleUnlockedForUser(
   userId: string,
   module: { prerequisiteModuleId: string | null },

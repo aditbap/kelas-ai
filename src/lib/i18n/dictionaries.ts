@@ -681,6 +681,11 @@ const en = {
       prerequisiteSaving: 'Saving…',
       prerequisiteSubmit: 'Save prerequisite',
       noOtherModules: 'You have no other modules to require yet.',
+      dangerZoneLabel: 'Delete module',
+      dangerZoneNote: 'Permanently deletes this module, its sessions, lessons, and assignments.',
+      deleteConfirm: 'Delete this module? This cannot be undone.',
+      deleteSubmit: 'Delete module',
+      deleting: 'Deleting…',
     },
     cohorts: {
       title: 'Cohorts',
@@ -1429,6 +1434,11 @@ const id: Dictionary = {
       prerequisiteSaving: 'Menyimpan…',
       prerequisiteSubmit: 'Simpan prasyarat',
       noOtherModules: 'Belum ada modul lain yang bisa dijadikan prasyarat.',
+      dangerZoneLabel: 'Hapus modul',
+      dangerZoneNote: 'Menghapus modul ini secara permanen beserta sesi, materi, dan tugasnya.',
+      deleteConfirm: 'Hapus modul ini? Tindakan ini tidak bisa dibatalkan.',
+      deleteSubmit: 'Hapus modul',
+      deleting: 'Menghapus…',
     },
     cohorts: {
       title: 'Batch',

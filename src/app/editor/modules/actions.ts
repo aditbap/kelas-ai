@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 import { ContentType, LessonKind, Role, SubmissionType } from '@/generated/prisma/client/enums';
 import { logAudit } from '@/lib/audit';
@@ -53,7 +54,29 @@ export async function createModuleAction(
   });
 
   revalidatePath('/editor/modules');
-  return { success: `Created "${module_.title}".` };
+  redirect(`/editor/modules/${module_.id}`);
+}
+
+export async function deleteModuleAction(
+  _prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const session = await requireRole(Role.Editor);
+
+  const moduleId = String(formData.get('moduleId') ?? '');
+  const module_ = await assertOwnsModule(session.userId, moduleId);
+  if (!module_) return { error: 'Module not found.' };
+
+  await prisma.module.delete({ where: { id: moduleId } });
+  await logAudit({
+    actorId: session.userId,
+    action: 'module.delete',
+    targetType: 'Module',
+    targetId: moduleId,
+  });
+
+  revalidatePath('/editor/modules');
+  redirect('/editor/modules');
 }
 
 export async function addSessionAction(
