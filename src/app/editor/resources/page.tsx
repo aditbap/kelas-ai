@@ -4,6 +4,7 @@ import { getTranslations } from '@/lib/i18n/get-locale';
 import { requireRole } from '@/lib/session';
 
 import { CreateResourceForm } from './create-resource-form';
+import { EditResourceForm } from './edit-resource-form';
 
 export default async function EditorResourcesPage() {
   await requireRole(Role.Editor);
@@ -39,6 +40,7 @@ export default async function EditorResourcesPage() {
               {resource.tags.length > 0 ? (
                 <p className="mt-1 text-fine text-ink-muted">{resource.tags.join(', ')}</p>
               ) : null}
+              <EditResourceForm resource={resource} t={s.createForm} />
             </li>
           ))
         )}

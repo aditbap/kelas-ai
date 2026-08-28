@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 import { Role } from '@/generated/prisma/client/enums';
 import { logAudit } from '@/lib/audit';
@@ -37,6 +38,65 @@ export async function createCohortAction(
   return { success: `Created cohort "${name}".` };
 }
 
+export async function updateCohortAction(
+  _prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const session = await requireRole(Role.Editor);
+
+  const cohortId = String(formData.get('cohortId') ?? '');
+  const name = String(formData.get('name') ?? '').trim();
+  const onsiteDate = String(formData.get('onsiteDate') ?? '');
+
+  if (!name || !onsiteDate) {
+    return { error: 'Fill in a name and onsite date.' };
+  }
+
+  const cohort = await prisma.cohort.findFirst({
+    where: { id: cohortId, editorId: session.userId },
+  });
+  if (!cohort) return { error: 'Cohort not found.' };
+
+  await prisma.cohort.update({
+    where: { id: cohortId },
+    data: { name, onsiteDate: new Date(onsiteDate) },
+  });
+  await logAudit({
+    actorId: session.userId,
+    action: 'cohort.update',
+    targetType: 'Cohort',
+    targetId: cohortId,
+  });
+
+  revalidatePath(`/editor/cohorts/${cohortId}`);
+  revalidatePath('/editor/cohorts');
+  return { success: 'Cohort updated.' };
+}
+
+export async function deleteCohortAction(
+  _prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const session = await requireRole(Role.Editor);
+
+  const cohortId = String(formData.get('cohortId') ?? '');
+  const cohort = await prisma.cohort.findFirst({
+    where: { id: cohortId, editorId: session.userId },
+  });
+  if (!cohort) return { error: 'Cohort not found.' };
+
+  await prisma.cohort.delete({ where: { id: cohortId } });
+  await logAudit({
+    actorId: session.userId,
+    action: 'cohort.delete',
+    targetType: 'Cohort',
+    targetId: cohortId,
+  });
+
+  revalidatePath('/editor/cohorts');
+  redirect('/editor/cohorts');
+}
+
 /** Adds a student to the cohort roster directly, by email. */
 export async function addCohortMemberAction(
   _prevState: ActionState,
@@ -71,7 +131,10 @@ export async function addCohortMemberAction(
   return { success: `Added ${student.name} to the cohort.` };
 }
 
-export async function removeCohortMemberAction(formData: FormData): Promise<void> {
+export async function removeCohortMemberAction(
+  _prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
   const session = await requireRole(Role.Editor);
 
   const cohortId = String(formData.get('cohortId') ?? '');
@@ -80,7 +143,7 @@ export async function removeCohortMemberAction(formData: FormData): Promise<void
   const cohort = await prisma.cohort.findFirst({
     where: { id: cohortId, editorId: session.userId },
   });
-  if (!cohort) return;
+  if (!cohort) return { error: 'Cohort not found.' };
 
   await prisma.cohortMember.deleteMany({ where: { cohortId, userId } });
   await logAudit({
@@ -90,4 +153,5 @@ export async function removeCohortMemberAction(formData: FormData): Promise<void
     targetId: cohortId,
   });
   revalidatePath(`/editor/cohorts/${cohortId}`);
+  return { success: 'Removed.' };
 }

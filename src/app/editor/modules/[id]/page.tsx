@@ -90,6 +90,8 @@ export default async function ModuleStudioPage({
       ) : activeTab === 'settings' ? (
         <SettingsTab
           moduleId={module_.id}
+          title={module_.title}
+          description={module_.description}
           isPublished={module_.isPublished}
           prerequisiteModuleId={module_.prerequisiteModuleId}
           otherModules={await prisma.module.findMany({

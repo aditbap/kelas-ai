@@ -6,7 +6,10 @@ import { cn } from '@/lib/utils';
 
 import { AddAssignmentForm } from './add-assignment-form';
 import { AddLessonForm } from './add-lesson-form';
+import { EditAssignmentForm } from './edit-assignment-form';
+import { EditLessonForm } from './edit-lesson-form';
 import type { OutlineSession } from './outline-tab';
+import { SessionToolbar } from './session-toolbar';
 
 /*
   The design's item-editor screen: a focused authoring column with a back link
@@ -44,7 +47,13 @@ export function SessionEditor({
         <p className="mb-2 text-fine font-semibold tracking-wide text-ink-muted">
           {t.sessionEyebrow(session.order)}
         </p>
-        <h1 className="mb-10 text-display-md text-ink text-pretty">{session.title}</h1>
+        <h1 className="mb-4 text-display-md text-ink text-pretty">{session.title}</h1>
+        <SessionToolbar
+          sessionId={session.id}
+          title={session.title}
+          canMoveUp={session.order > 1}
+          canMoveDown={session.order < allSessions.length}
+        />
 
         <div className="flex flex-wrap gap-x-10 gap-y-10">
           <section className="min-w-0 flex-[1_1_320px]">
@@ -71,6 +80,15 @@ export function SessionEditor({
                     ) : (
                       <p className="mt-1 text-fine text-action">{t.itemState.needsContent}</p>
                     )}
+                    <div className="mt-2">
+                      <EditLessonForm
+                        lesson={lesson}
+                        t={moduleDetailT.addLessonForm}
+                        lessonKindLabel={lessonKindLabel}
+                        canMoveUp={index > 0}
+                        canMoveDown={index < session.lessons.length - 1}
+                      />
+                    </div>
                   </li>
                 ))
               )}
@@ -104,6 +122,12 @@ export function SessionEditor({
                         : ''}
                       {assignment.isAdvancedMaterial ? moduleDetailT.advancedMaterialSuffix : ''}
                     </p>
+                    <div className="mt-2">
+                      <EditAssignmentForm
+                        assignment={assignment}
+                        t={moduleDetailT.addAssignmentForm}
+                      />
+                    </div>
                   </li>
                 ))
               )}

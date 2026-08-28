@@ -6,8 +6,10 @@ import { prisma } from '@/lib/db';
 import { getTranslations } from '@/lib/i18n/get-locale';
 import { requireRole } from '@/lib/session';
 
-import { removeCohortMemberAction } from '../actions';
 import { AddMemberForm } from './add-member-form';
+import { DeleteCohortForm } from './delete-cohort-form';
+import { EditCohortForm } from './edit-cohort-form';
+import { RemoveMemberForm } from './remove-member-form';
 
 export default async function CohortDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await requireRole(Role.Editor);
@@ -35,6 +37,15 @@ export default async function CohortDetailPage({ params }: { params: Promise<{ i
         </p>
       </div>
 
+      <div className="rounded-lg border border-hairline p-4">
+        <EditCohortForm
+          cohortId={cohort.id}
+          name={cohort.name}
+          onsiteDate={cohort.onsiteDate}
+          t={s.createForm}
+        />
+      </div>
+
       <div>
         <h2 className="text-caption font-semibold text-ink-muted">
           {d.studentsHeading(cohort.members.length)}
@@ -60,13 +71,7 @@ export default async function CohortDetailPage({ params }: { params: Promise<{ i
                     </span>
                   )}
                 </div>
-                <form action={removeCohortMemberAction} className="shrink-0">
-                  <input type="hidden" name="cohortId" value={cohort.id} />
-                  <input type="hidden" name="userId" value={member.userId} />
-                  <button type="submit" className="text-fine text-destructive hover:underline">
-                    {d.remove}
-                  </button>
-                </form>
+                <RemoveMemberForm cohortId={cohort.id} userId={member.userId} label={d.remove} />
               </li>
             ))
           )}
@@ -74,6 +79,10 @@ export default async function CohortDetailPage({ params }: { params: Promise<{ i
         <div className="mt-4">
           <AddMemberForm cohortId={cohort.id} t={d.addMemberForm} />
         </div>
+      </div>
+
+      <div className="border-t border-hairline pt-6">
+        <DeleteCohortForm cohortId={cohort.id} />
       </div>
     </div>
   );

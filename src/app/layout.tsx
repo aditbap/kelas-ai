@@ -37,6 +37,7 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
     <html
       lang={locale}
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
       className={`${inter.variable} ${geistMono.variable} h-full`}
     >
       <body className="flex min-h-full flex-col">

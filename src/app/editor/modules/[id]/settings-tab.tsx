@@ -2,6 +2,7 @@ import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { cn } from '@/lib/utils';
 
 import { DeleteModuleForm } from './delete-module-form';
+import { EditModuleForm } from './edit-module-form';
 import { PrerequisiteForm } from './prerequisite-form';
 import { PublishForm } from './publish-form';
 
@@ -12,6 +13,8 @@ import { PublishForm } from './publish-form';
 */
 export function SettingsTab({
   moduleId,
+  title,
+  description,
   isPublished,
   prerequisiteModuleId,
   otherModules,
@@ -19,6 +22,8 @@ export function SettingsTab({
   publishFormT,
 }: {
   moduleId: string;
+  title: string;
+  description: string | null;
   isPublished: boolean;
   prerequisiteModuleId: string | null;
   otherModules: { id: string; title: string }[];
@@ -26,6 +31,11 @@ export function SettingsTab({
   publishFormT: Dictionary['editor']['moduleDetail']['publishForm'];
 }) {
   const rows = [
+    {
+      label: t.detailsLabel,
+      note: t.detailsNote,
+      control: <EditModuleForm moduleId={moduleId} title={title} description={description} />,
+    },
     {
       label: t.visibilityLabel,
       note: t.visibilityNote,

@@ -434,6 +434,8 @@ const en = {
       overdue: 'Overdue',
       pass: 'Pass',
       fail: 'Fail',
+      moduleInProgress: 'In progress',
+      moduleCompleted: 'Completed',
     },
     progress: {
       title: 'Achievements',
@@ -530,6 +532,17 @@ const en = {
     },
   },
   editor: {
+    common: {
+      edit: 'Edit',
+      save: 'Save',
+      saving: 'Saving…',
+      cancel: 'Cancel',
+      delete: 'Delete',
+      deleting: 'Deleting…',
+      deleteConfirm: 'Delete this? This cannot be undone.',
+      moveUp: 'Move up',
+      moveDown: 'Move down',
+    },
     dashboard: {
       title: 'Content & grading dashboard',
       summary: (cohorts: number, submissions: number) =>
@@ -673,6 +686,8 @@ const en = {
       settingsTitle: 'Visibility & prerequisites',
       settingsSubtitle:
         'Controls who can see this module and what a student must finish before it unlocks.',
+      detailsLabel: 'Module details',
+      detailsNote: 'The title and description students see.',
       visibilityLabel: 'Visibility',
       visibilityNote: 'A published module is visible to every Student with All-Access.',
       prerequisiteLabel: 'Prerequisite',
@@ -1185,6 +1200,8 @@ const id: Dictionary = {
       overdue: 'Lewat tenggat',
       pass: 'Lulus',
       fail: 'Tidak Lulus',
+      moduleInProgress: 'Sedang dikerjakan',
+      moduleCompleted: 'Selesai',
     },
     progress: {
       title: 'Pencapaian',
@@ -1281,6 +1298,17 @@ const id: Dictionary = {
     },
   },
   editor: {
+    common: {
+      edit: 'Ubah',
+      save: 'Simpan',
+      saving: 'Menyimpan…',
+      cancel: 'Batal',
+      delete: 'Hapus',
+      deleting: 'Menghapus…',
+      deleteConfirm: 'Hapus ini? Tindakan ini tidak bisa dibatalkan.',
+      moveUp: 'Naikkan',
+      moveDown: 'Turunkan',
+    },
     dashboard: {
       title: 'Dasbor konten & penilaian',
       summary: (cohorts: number, submissions: number) =>
@@ -1425,6 +1453,8 @@ const id: Dictionary = {
       settingsTitle: 'Visibilitas & prasyarat',
       settingsSubtitle:
         'Mengatur siapa yang bisa melihat modul ini dan apa yang harus diselesaikan peserta sebelum modul terbuka.',
+      detailsLabel: 'Detail modul',
+      detailsNote: 'Judul dan deskripsi yang dilihat peserta.',
       visibilityLabel: 'Visibilitas',
       visibilityNote: 'Modul yang terbit terlihat oleh semua Peserta dengan All-Access.',
       prerequisiteLabel: 'Prasyarat',
